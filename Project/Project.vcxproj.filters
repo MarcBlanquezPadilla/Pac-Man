@@ -8,6 +8,15 @@
     <Filter Include="Core">
       <UniqueIdentifier>{c9807823-59af-4942-b724-71f63e05ae02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{0c4ef156-109f-4fdc-a89a-a8f4ae37d576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{abd64156-f89b-4254-be5d-a4fe0535789a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{8e269a27-b856-43d3-adc7-adff83d30331}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -18,6 +27,36 @@
     </ClCompile>
     <ClCompile Include="LogMessages.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticImage.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -32,6 +71,39 @@
     </ClInclude>
     <ClInclude Include="LogMessages.h">
       <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticImage.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

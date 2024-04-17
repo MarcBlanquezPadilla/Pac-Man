@@ -1,3 +1,4 @@
+#pragma once
 //Displaying scale factor
 #define GAME_SCALE_FACTOR	2.0f
 
@@ -14,9 +15,9 @@ enum class AppStatus { OK = 0, ERROR, QUIT };
 
 //Game constants
 #define MARGIN_GUI_Y	28
-#define TILE_SIZE		16
-#define LEVEL_WIDTH		25
-#define LEVEL_HEIGHT	17
+#define TILE_SIZE		4
+#define LEVEL_WIDTH		56
+#define LEVEL_HEIGHT	62
 
 //Entities animation delay
 #define ANIM_DELAY		4

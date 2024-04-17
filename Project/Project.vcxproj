@@ -144,13 +144,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="LogMessages.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="StaticImage.cpp" />
+    <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="AABB.h" />
+    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="StaticImage.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="LogMessages.h" />
     <ClInclude Include="MemoryLeaks.h" />
   </ItemGroup>
