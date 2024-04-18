@@ -19,90 +19,90 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="src\Game.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="LogMessages.cpp">
+    <ClCompile Include="src\LogMessages.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
+    <ClCompile Include="src\ResourceManager.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="src\Scene.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="src\Player.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="src\Object.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
+    <ClCompile Include="src\Entity.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="AABB.cpp">
+    <ClCompile Include="src\AABB.cpp">
       <Filter>Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
+    <ClCompile Include="src\RenderComponent.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
+    <ClCompile Include="src\Sprite.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="StaticImage.cpp">
+    <ClCompile Include="src\StaticImage.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap.cpp">
+    <ClCompile Include="src\TileMap.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MemoryLeaks.h">
+    <ClInclude Include="src\MemoryLeaks.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="src\Game.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
+    <ClInclude Include="src\Globals.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="LogMessages.h">
+    <ClInclude Include="src\LogMessages.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
+    <ClInclude Include="src\ResourceManager.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="src\Scene.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="src\Player.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="src\Object.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="src\Entity.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Point.h">
+    <ClInclude Include="src\Point.h">
       <Filter>Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
+    <ClInclude Include="src\AABB.h">
       <Filter>Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="RenderComponent.h">
+    <ClInclude Include="src\RenderComponent.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="src\Sprite.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="StaticImage.h">
+    <ClInclude Include="src\StaticImage.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="TileMap.h">
+    <ClInclude Include="src\TileMap.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

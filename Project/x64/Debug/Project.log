@@ -1,7 +1,148 @@
-﻿  Scene.cpp
-C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\Scene.cpp(85,10): warning C4101: 'obj': variable local sin referencia
-  Sprite.cpp
+﻿  Game.cpp
+  Main.cpp
+  Player.cpp
+  Scene.cpp
   Generando código...
+  Buscando bibliotecas
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+  Búsqueda de bibliotecas finalizada
+  
+  Buscando bibliotecas
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\kernel32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\user32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\gdi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winspool.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\comdlg32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\advapi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\shell32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\ole32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\oleaut32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\uuid.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbc32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbccp32.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\msvcprtd.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRTD.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\OLDNAMES.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRT.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\vcruntimed.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\ucrt\x64\ucrtd.lib:
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\kernel32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\user32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\gdi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winspool.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\comdlg32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\advapi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\shell32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\ole32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\oleaut32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\uuid.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbc32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbccp32.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\msvcprtd.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRTD.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\OLDNAMES.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRT.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\vcruntimed.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\ucrt\x64\ucrtd.lib:
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+  
+  Búsqueda de bibliotecas finalizada
 LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-Scene.obj : error LNK2019: símbolo externo "public: void __cdecl TileMap::Update(void)" (?Update@TileMap@@QEAAXXZ) sin resolver al que se hace referencia en la función "public: void __cdecl Scene::Update(void)" (?Update@Scene@@QEAAXXZ)
-C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\x64\Debug\Project.exe : fatal error LNK1120: 1 externos sin resolver
+  
+  Buscando bibliotecas
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\kernel32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\user32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\gdi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winspool.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\comdlg32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\advapi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\shell32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\ole32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\oleaut32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\uuid.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbc32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbccp32.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\msvcprtd.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRTD.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\OLDNAMES.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRT.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\vcruntimed.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\ucrt\x64\ucrtd.lib:
+  
+  Búsqueda de bibliotecas finalizada
+  
+  Buscando bibliotecas
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\kernel32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\user32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\gdi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winspool.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\comdlg32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\advapi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\shell32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\ole32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\oleaut32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\uuid.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbc32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbccp32.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\msvcprtd.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRTD.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\OLDNAMES.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRT.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\vcruntimed.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\ucrt\x64\ucrtd.lib:
+  
+  Búsqueda de bibliotecas finalizada
+  
+  Buscando bibliotecas
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\kernel32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\user32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\gdi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winspool.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\comdlg32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\advapi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\shell32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\ole32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\oleaut32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\uuid.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbc32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbccp32.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\msvcprtd.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRTD.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\OLDNAMES.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRT.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\vcruntimed.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\ucrt\x64\ucrtd.lib:
+  
+  Búsqueda de bibliotecas finalizada
+  
+  Buscando bibliotecas
+      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winmm.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\kernel32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\user32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\gdi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\winspool.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\comdlg32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\advapi32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\shell32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\ole32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\oleaut32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\uuid.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbc32.lib:
+      Buscando C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\um\x64\odbccp32.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\msvcprtd.lib:
+      Buscando C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64\MSVCRTD.lib:
+  
+  Búsqueda de bibliotecas finalizada
+  Project.vcxproj -> C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\x64\Debug\Project.exe
