@@ -15,10 +15,17 @@ enum class AppStatus { OK = 0, ERROR, QUIT };
 
 //Game constants
 #define TILE_SIZE		8
-#define LEVEL_WIDTH		56
+#define LEVEL_WIDTH		68
 #define LEVEL_HEIGHT	62
 #define MARGIN_GUI_X	(WINDOW_WIDTH/2)-(LEVEL_WIDTH*TILE_SIZE)/2
 #define MARGIN_GUI_Y	(WINDOW_HEIGHT/2)-(LEVEL_HEIGHT*TILE_SIZE)/2 + 80 //(EXTRA DISPLAÇMENT)
 
+//Teleports
+#define RIGHT_TP_POS_X	496
+#define RIGHT_TP_POS_Y	216
+#define LEFT_TP_POS_X	16	
+#define LEFT_TP_POS_Y	216
+
 //Entities animation delay
 #define ANIM_DELAY		4
+

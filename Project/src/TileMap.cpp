@@ -25,7 +25,12 @@ void TileMap::InitTileDictionary()
 {
 	const int n = TILE_SIZE;
 
+	dict_tiles[(int)Tile::EMPTY] = { n, n, n, n };
+
+	dict_tiles[(int)Tile::BLACK_BLOCK] = { n, n, n, n };
+
 	dict_tiles[(int)Tile::WALL_OUTSIDE_UP] = { n,  0, n, n };
+
 	dict_tiles[(int)Tile::WALL_OUTSIDE_DOWN] = { n,  n * 3, n, n };
 	dict_tiles[(int)Tile::WALL_OUTSIDE_LEFT] = { 0, n, n, n };
 	dict_tiles[(int)Tile::WALL_OUTSIDE_RIGHT] = { n * 3, n, n, n };
@@ -64,8 +69,6 @@ void TileMap::InitTileDictionary()
 	dict_tiles[(int)Tile::DOOR_CORNER_LEFT] = { 13 * n, n * 1, n, n };
 	dict_tiles[(int)Tile::DOOR_CORNER_RIGHT] = { 14 * n, n * 1, n, n };
 
-
-	
 	dict_tiles[(int)Tile::DOOR] = { 16 * n, 0, n, n };
 }
 AppStatus TileMap::Initialise()
@@ -77,6 +80,11 @@ AppStatus TileMap::Initialise()
 		return AppStatus::ERROR;
 	}
 	img_tiles = data.GetTexture(ResourceType::IMG_MAP);
+
+	if (data.LoadTexture(ResourceType::IMG_ITEMS, "resources/sprites/ObjectsX2.png") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
 
 	return AppStatus::OK;
 }
@@ -194,7 +202,7 @@ void TileMap::Render()
 		for (int j = 0; j < width; ++j)
 		{
 			tile = map[i * width + j];
-			if (tile != Tile::AIR)
+			if (tile != Tile::AIR && tile!=Tile::EMPTY && tile != Tile::TP_LEFT && tile != Tile::TP_RIGHT)
 			{
 				pos.x = (float)j * TILE_SIZE;
 				pos.y = (float)i * TILE_SIZE;
@@ -205,6 +213,29 @@ void TileMap::Render()
 		}
 	}
 }
+void TileMap::RenderEmptys()
+{
+	Tile tile;
+	Rectangle rc;
+	Vector2 pos;
+
+	for (int i = 0; i < height; ++i)
+	{
+		for (int j = 0; j < width; ++j)
+		{
+			tile = map[i * width + j];
+			if ( tile == Tile::EMPTY || tile == Tile::TP_LEFT || tile == Tile::TP_RIGHT)
+			{
+				pos.x = (float)j * TILE_SIZE;
+				pos.y = (float)i * TILE_SIZE;
+
+				rc = dict_tiles[(int)tile];
+				DrawTextureRec(*img_tiles, rc, pos, WHITE);
+			}
+		}
+	}
+}
+
 void TileMap::Release()
 {
 	ResourceManager& data = ResourceManager::Instance();

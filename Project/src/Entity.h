@@ -8,8 +8,10 @@
 class Entity
 {
 public:
+	Entity(const Point& p, const Point& hp, int width, int height);
 	Entity(const Point& p, int width, int height);
 	Entity(const Point& p, int width, int height, int frame_width, int frame_height);
+	Entity(const Point& p, const Point& hp, int width, int height, int frame_width, int frame_height);
 	virtual ~Entity();
 
 	void SetPos(const Point& p);
@@ -28,7 +30,7 @@ protected:
 	Point GetRenderingPosition() const;
 
 	//Logical/physical model
-	Point pos, dir;
+	Point pos, dir, hitBoxOffset;
 	int width, height;
 
 	//Representation model

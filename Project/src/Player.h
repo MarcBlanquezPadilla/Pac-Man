@@ -9,10 +9,6 @@
 #define PLAYER_PHYSICAL_WIDTH	32
 #define PLAYER_PHYSICAL_HEIGHT	32
 
-//Player spawn positions
-#define PLAYER_SPAWN_X	208//(LEVEL_WIDTH*TILE_SIZE)/2 - PLAYER_PHYSICAL_WIDTH/2
-#define PLAYER_SPAWN_Y	264//(LEVEL_HEIGHT*TILE_SIZE)/2 + PLAYER_PHYSICAL_HEIGHT/2
-
 //Horizontal speed and vertical speed while falling down
 #define PLAYER_SPEED			2
 
@@ -63,10 +59,6 @@ private:
 	//Animation management
 	void SetAnimation(int id);
 	PlayerAnim GetAnimation();
-
-	//Ladder get in/out steps
-	bool IsInFirstHalfTile() const;
-	bool IsInSecondHalfTile() const;
 
 	State state;
 	Look look;

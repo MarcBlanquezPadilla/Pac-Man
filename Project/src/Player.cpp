@@ -130,15 +130,6 @@ bool Player::JustOneKeyIsDown()
 		return true;
 	else return false;
 }
-
-bool Player::IsInFirstHalfTile() const
-{
-	return pos.y % TILE_SIZE < TILE_SIZE / 2;
-}
-bool Player::IsInSecondHalfTile() const
-{
-	return pos.y % TILE_SIZE >= TILE_SIZE / 2;
-}
 void Player::SetAnimation(int id)
 {
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
