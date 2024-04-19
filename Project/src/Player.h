@@ -11,7 +11,7 @@
 
 //Player spawn positions
 #define PLAYER_SPAWN_X	208//(LEVEL_WIDTH*TILE_SIZE)/2 - PLAYER_PHYSICAL_WIDTH/2
-#define PLAYER_SPAWN_Y	295//(LEVEL_HEIGHT*TILE_SIZE)/2 + PLAYER_PHYSICAL_HEIGHT/2
+#define PLAYER_SPAWN_Y	264//(LEVEL_HEIGHT*TILE_SIZE)/2 + PLAYER_PHYSICAL_HEIGHT/2
 
 //Horizontal speed and vertical speed while falling down
 #define PLAYER_SPEED			2
