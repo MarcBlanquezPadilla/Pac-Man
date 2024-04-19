@@ -260,7 +260,8 @@ void Player::ChangeMove()
 			pos.x += -PLAYER_SPEED;
 
 			box = GetHitbox();
-			if (!map->TestCollisionWallLeft(box)) StartWalkingLeft();
+			if (!map->TestCollisionWallLeft(box))
+				StartWalkingLeft();
 		}
 		else if (IsKeyDown(KEY_RIGHT) && look != Look::RIGHT)
 		{

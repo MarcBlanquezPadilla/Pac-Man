@@ -279,6 +279,7 @@ void Scene::ClearLevel()
 		delete obj;
 	}
 	objects.clear();
+	
 }
 void Scene::RenderObjects() const
 {

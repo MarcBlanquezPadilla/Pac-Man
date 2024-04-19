@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
