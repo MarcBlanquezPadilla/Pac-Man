@@ -58,6 +58,21 @@
     <ClCompile Include="src\TileMap.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ghost.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Blinky.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pinky.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Inky.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Clyde.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MemoryLeaks.h">
@@ -105,5 +120,12 @@
     <ClInclude Include="src\TileMap.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Ghost.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blinky.h" />
+    <ClInclude Include="src\Pinky.h" />
+    <ClInclude Include="src\Inky.h" />
+    <ClInclude Include="src\Clyde.h" />
   </ItemGroup>
 </Project>

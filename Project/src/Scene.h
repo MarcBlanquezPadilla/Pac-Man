@@ -4,6 +4,10 @@
 #include "TileMap.h"
 #include "Object.h"
 #include "Globals.h"
+#include "Blinky.h"
+#include "Pinky.h"
+#include "Inky.h"
+#include "Clyde.h"
 
 enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SIZE };
 
@@ -30,6 +34,10 @@ private:
     void RenderGUI() const;
 
     Player* player;
+    Blinky* blinky;
+    Pinky* pinky;
+    Inky* inky;
+    Clyde* clyde;
     TileMap* level;
     std::vector<Object*> objects;
     int peletsCollected;

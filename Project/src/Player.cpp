@@ -5,7 +5,7 @@
 #include <raymath.h>
 #include "LogMessages.h"
 
-Player::Player(const Point& p, State s, Look view) :
+Player::Player(const Point& p, PlayerState s, PlayerLook view) :
 	Entity(p, PLAYER_PHYSICAL_WIDTH, PLAYER_PHYSICAL_HEIGHT, PLAYER_FRAME_SIZE, PLAYER_FRAME_SIZE)
 {
 	state = s;
@@ -67,8 +67,8 @@ AppStatus Player::Initialise()
 	for (i = 0; i < 11; ++i)
 		sprite->AddKeyFrame((int)PlayerAnim::DIE, { (float)i * n, 1, n, n });
 	
-	state = State::WALKING;
-	look = Look::RIGHT;
+	state = PlayerState::WALKING;
+	look = PlayerLook::RIGHT;
 	SetAnimation((int)PlayerAnim::BITE_RIGHT);
 
 	return AppStatus::OK;
@@ -91,19 +91,19 @@ void Player::SetTileMap(TileMap* tilemap)
 }
 bool Player::IsLookingRight() const
 {
-	return look == Look::RIGHT;
+	return look == PlayerLook::RIGHT;
 }
 bool Player::IsLookingLeft() const
 {
-	return look == Look::LEFT;
+	return look == PlayerLook::LEFT;
 }
 bool Player::IsLookingUp() const
 {
-	return look == Look::UP;
+	return look == PlayerLook::UP;
 }
 bool Player::IsLookingDown() const
 {
-	return look == Look::DOWN;
+	return look == PlayerLook::DOWN;
 }
 bool Player::JustOneKeyIsDown()
 {	
@@ -143,7 +143,7 @@ PlayerAnim Player::GetAnimation()
 void Player::Stop()
 {
 	dir = { 0,0 };
-	state = State::IDLE;
+	state = PlayerState::IDLE;
 	if (IsLookingRight())		SetAnimation((int)PlayerAnim::BITE_RIGHT);
 	else if (IsLookingLeft())	SetAnimation((int)PlayerAnim::BITE_LEFT);
 	else if (IsLookingUp())		SetAnimation((int)PlayerAnim::BITE_UP);
@@ -151,26 +151,26 @@ void Player::Stop()
 }
 void Player::StartWalkingLeft()
 {
-	state = State::WALKING;
-	look = Look::LEFT;
+	state = PlayerState::WALKING;
+	look = PlayerLook::LEFT;
 	SetAnimation((int)PlayerAnim::BITE_LEFT);
 }
 void Player::StartWalkingRight()
 {
-	state = State::WALKING;
-	look = Look::RIGHT;
+	state = PlayerState::WALKING;
+	look = PlayerLook::RIGHT;
 	SetAnimation((int)PlayerAnim::BITE_RIGHT);
 }
 void Player::StartWalkingUp()
 {
-	state = State::WALKING;
-	look = Look::UP;
+	state = PlayerState::WALKING;
+	look = PlayerLook::UP;
 	SetAnimation((int)PlayerAnim::BITE_UP);
 }
 void Player::StartWalkingDown()
 {
-	state = State::WALKING;
-	look = Look::DOWN;
+	state = PlayerState::WALKING;
+	look = PlayerLook::DOWN;
 	SetAnimation((int)PlayerAnim::BITE_DOWN);
 }
 
@@ -192,7 +192,7 @@ void Player::Move()
 	int prev_x = pos.x;
 	int prev_y = pos.y;
 
-	if (look == Look::RIGHT)
+	if (look == PlayerLook::RIGHT)
 	{
 		pos.x += PLAYER_SPEED;
 
@@ -200,10 +200,10 @@ void Player::Move()
 		if (map->TestCollisionWallRight(box))
 		{
 			pos.x = prev_x;
-			if (state == State::WALKING) Stop();
+			if (state == PlayerState::WALKING) Stop();
 		}
 	}
-	else if (look == Look::LEFT)
+	else if (look == PlayerLook::LEFT)
 	{
 		pos.x += -PLAYER_SPEED;
 
@@ -211,10 +211,10 @@ void Player::Move()
 		if (map->TestCollisionWallLeft(box))
 		{
 			pos.x = prev_x;
-			if (state == State::WALKING) Stop();
+			if (state == PlayerState::WALKING) Stop();
 		}
 	}
-	else if (look == Look::UP)
+	else if (look == PlayerLook::UP)
 	{
 		pos.y += -PLAYER_SPEED;
 
@@ -222,7 +222,7 @@ void Player::Move()
 		if (map->TestCollisionWallUp(box))
 		{
 			pos.y = prev_y;
-			if (state == State::WALKING) Stop();
+			if (state == PlayerState::WALKING) Stop();
 		}
 	}
 	else
@@ -233,7 +233,7 @@ void Player::Move()
 		if (map->TestCollisionWallDown(box))
 		{
 			pos.y = prev_y;
-			if (state == State::WALKING) Stop();
+			if (state == PlayerState::WALKING) Stop();
 		}
 	}
 }
@@ -246,7 +246,7 @@ void Player::ChangeMove()
 		int prev_x = pos.x;
 		int prev_y = pos.y;
 
-		if (IsKeyDown(KEY_LEFT) && look != Look::LEFT)
+		if (IsKeyDown(KEY_LEFT) && look != PlayerLook::LEFT)
 		{
 			pos.x += -PLAYER_SPEED;
 
@@ -254,21 +254,21 @@ void Player::ChangeMove()
 			if (!map->TestCollisionWallLeft(box))
 				StartWalkingLeft();
 		}
-		else if (IsKeyDown(KEY_RIGHT) && look != Look::RIGHT)
+		else if (IsKeyDown(KEY_RIGHT) && look != PlayerLook::RIGHT)
 		{
 			pos.x += PLAYER_SPEED;
 
 			box = GetHitbox();
 			if (!map->TestCollisionWallRight(box)) StartWalkingRight();
 		}
-		else if (IsKeyDown(KEY_UP) && look != Look::UP)
+		else if (IsKeyDown(KEY_UP) && look != PlayerLook::UP)
 		{
 			pos.y += -PLAYER_SPEED;
 
 			box = GetHitbox();
 			if (!map->TestCollisionWallUp(box)) StartWalkingUp();
 		}
-		else if (IsKeyDown(KEY_DOWN) && look != Look::DOWN)
+		else if (IsKeyDown(KEY_DOWN) && look != PlayerLook::DOWN)
 		{
 			pos.y += PLAYER_SPEED;
 

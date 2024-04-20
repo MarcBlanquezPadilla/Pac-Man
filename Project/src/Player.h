@@ -13,8 +13,8 @@
 #define PLAYER_SPEED			2
 
 //Logic states
-enum class State { IDLE, WALKING, DEAD };
-enum class Look { RIGHT, LEFT, UP, DOWN };
+enum class PlayerState { IDLE, WALKING, DEAD };
+enum class PlayerLook { RIGHT, LEFT, UP, DOWN };
 
 //Rendering states
 enum class PlayerAnim {
@@ -26,7 +26,7 @@ enum class PlayerAnim {
 class Player : public Entity
 {
 public:
-	Player(const Point& p, State s, Look view);
+	Player(const Point& p, PlayerState s, PlayerLook view);
 	~Player();
 
 	AppStatus Initialise();
@@ -60,8 +60,8 @@ private:
 	void SetAnimation(int id);
 	PlayerAnim GetAnimation();
 
-	State state;
-	Look look;
+	PlayerState state;
+	PlayerLook look;
 
 	TileMap* map;
 

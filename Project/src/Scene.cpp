@@ -7,6 +7,10 @@ Scene::Scene()
 {
 	returnMainMenu = false; //PROVISIONAL
 	player = nullptr;
+	blinky = nullptr;
+	pinky = nullptr;
+	inky = nullptr;
+	clyde = nullptr;
 	level = nullptr;
 
 	camera.target = { 0, 0 };				//Center of the screen
@@ -26,6 +30,30 @@ Scene::~Scene()
 		delete player;
 		player = nullptr;
 	}
+	if (blinky != nullptr)
+	{
+		blinky->Release();
+		delete blinky;
+		blinky = nullptr;
+	}
+	if (pinky != nullptr)
+	{
+		pinky->Release();
+		delete pinky;
+		pinky = nullptr;
+	}
+	if (inky != nullptr)
+	{
+		inky->Release();
+		delete inky;
+		inky = nullptr;
+	}
+	if (clyde != nullptr)
+	{
+		clyde->Release();
+		delete clyde;
+		clyde = nullptr;
+	}
 	if (level != nullptr)
 	{
 		level->Release();
@@ -41,7 +69,7 @@ Scene::~Scene()
 AppStatus Scene::Init()
 {
 	//Create player
-	player = new Player({ 0, 0 }, State::IDLE, Look::RIGHT);
+	player = new Player({ 0, 0 }, PlayerState::IDLE, PlayerLook::RIGHT);
 	if (player == nullptr)
 	{
 		LOG("Failed to allocate memory for Player");
@@ -51,6 +79,57 @@ AppStatus Scene::Init()
 	if (player->Initialise() != AppStatus::OK)
 	{
 		LOG("Failed to initialise Player");
+		return AppStatus::ERROR;
+	}
+
+	//Create blinky
+	blinky = new Blinky({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	if (blinky == nullptr)
+	{
+		LOG("Failed to allocate memory for blinky");
+		return AppStatus::ERROR;
+	}
+	//Initialise blinky
+	if (blinky->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise blinky");
+		return AppStatus::ERROR;
+	}
+	//Create pinky
+	pinky = new Pinky({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	if (pinky == nullptr)
+	{
+		LOG("Failed to allocate memory for pinky");
+		return AppStatus::ERROR;
+	}
+	//Initialise pinky
+	if (pinky->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise pinky");
+		return AppStatus::ERROR;
+	}
+	inky = new Inky({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	if (inky == nullptr)
+	{
+		LOG("Failed to allocate memory for inky");
+		return AppStatus::ERROR;
+	}
+	//Initialise pinky
+	if (inky->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise inky");
+		return AppStatus::ERROR;
+	}
+	clyde = new Clyde({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	if (clyde == nullptr)
+	{
+		LOG("Failed to allocate memory for clyde");
+		return AppStatus::ERROR;
+	}
+	//Initialise pinky
+	if (clyde->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise clyde");
 		return AppStatus::ERROR;
 	}
 
@@ -76,6 +155,10 @@ AppStatus Scene::Init()
 
 	//Assign the tile map reference to the player to check collisions while navigating
 	player->SetTileMap(level);
+	blinky->SetTileMap(level);
+	pinky->SetTileMap(level);
+	inky->SetTileMap(level);
+	clyde->SetTileMap(level);
 
 	return AppStatus::OK;
 }
@@ -95,7 +178,7 @@ AppStatus Scene::LoadLevel(int stage)
 	{
 		map = new int[size] {
 			0,	0,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	2,	2,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	31,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	101,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	102,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
@@ -151,7 +234,7 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	103,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	104,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
@@ -178,6 +261,34 @@ AppStatus Scene::LoadLevel(int stage)
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
 				player->SetPos(pos);
+				map[i] = 0;
+			}
+			else if (tile == Tile::BLINKY)
+			{
+				pos.x = x * TILE_SIZE;
+				pos.y = y * TILE_SIZE;
+				blinky->SetPos(pos);
+				map[i] = 0;
+			}
+			else if (tile == Tile::PINKY)
+			{
+				pos.x = x * TILE_SIZE;
+				pos.y = y * TILE_SIZE;
+				pinky->SetPos(pos);
+				map[i] = 0;
+			}
+			else if (tile == Tile::INKY)
+			{
+				pos.x = x * TILE_SIZE;
+				pos.y = y * TILE_SIZE;
+				inky->SetPos(pos);
+				map[i] = 0;
+			}
+			else if (tile == Tile::CLYDE)
+			{
+				pos.x = x * TILE_SIZE;
+				pos.y = y * TILE_SIZE;
+				clyde->SetPos(pos);
 				map[i] = 0;
 			}
 			else if (tile == Tile::SMALL_PELET)
@@ -215,7 +326,7 @@ AppStatus Scene::LoadLevel(int stage)
 	//Tile map
 	level->Load(map, LEVEL_WIDTH, LEVEL_HEIGHT);
 
-	delete[] map;
+	delete map;
 
 	return AppStatus::OK;
 }
@@ -235,6 +346,10 @@ void Scene::Update()
 
 	level->Update();
 	player->Update();
+	blinky->Update();
+	pinky->Update();
+	inky->Update();
+	clyde->Update();
 	CheckCollisions();
 }
 void Scene::Render()
@@ -246,12 +361,20 @@ void Scene::Render()
 	{
 		RenderObjects();
 		player->Draw();
+		blinky->Draw();
+		pinky->Draw();
+		inky->Draw();
+		clyde->Draw();
 	}
 	level->RenderEmptys();
 	if (debug == DebugMode::SPRITES_AND_HITBOXES || debug == DebugMode::ONLY_HITBOXES)
 	{
 		RenderObjectsDebug(YELLOW);
 		player->DrawDebug(GREEN);
+		blinky->DrawDebug(RED);
+		pinky->DrawDebug(RED);
+		inky->DrawDebug(RED);
+		clyde->DrawDebug(RED);
 	}
 
 	EndMode2D();
@@ -262,11 +385,15 @@ void Scene::Release()
 {
 	level->Release();
 	player->Release();
+	blinky->Release();
+	pinky->Release();
+	inky->Release();
+	clyde->Release();
 	ClearLevel();
 }
 void Scene::CheckCollisions()
 {
-	AABB player_box, obj_box;
+	AABB player_box, obj_box, blinky_box, pinky_box, inky_box, clyde_box;
 
 	player_box = player->GetHitbox();
 	
@@ -302,6 +429,16 @@ void Scene::CheckCollisions()
 		}
 		else it++;
 	}
+	blinky_box = blinky->GetHitbox();
+	pinky_box = blinky->GetHitbox();
+	inky_box = blinky->GetHitbox();
+	clyde_box = clyde->GetHitbox();
+
+	if (player_box.TestAABB(blinky_box)) returnMainMenu = true;
+	if (player_box.TestAABB(pinky_box)) returnMainMenu = true;
+	if (player_box.TestAABB(inky_box)) returnMainMenu = true;
+	if (player_box.TestAABB(clyde_box)) returnMainMenu = true;
+
 }
 bool Scene::GetReturnMainMenu()
 {

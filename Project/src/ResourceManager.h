@@ -6,6 +6,7 @@
 
 enum class ResourceType {
     IMG_PLAYER,
+    IMG_GHOSTS,
     IMG_MAP,
     IMG_ITEMS,
     IMG_PUNTUATIONS,

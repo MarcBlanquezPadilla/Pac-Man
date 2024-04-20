@@ -145,10 +145,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Blinky.cpp" />
+    <ClCompile Include="src\Clyde.cpp" />
+    <ClCompile Include="src\Ghost.cpp" />
     <ClCompile Include="src\AABB.cpp" />
+    <ClCompile Include="src\Inky.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\LogMessages.cpp" />
+    <ClCompile Include="src\Pinky.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -160,10 +165,15 @@
     <ClCompile Include="src\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Clyde.h" />
+    <ClInclude Include="src\Ghost.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Globals.h" />
     <ClInclude Include="src\AABB.h" />
+    <ClInclude Include="src\Blinky.h" />
+    <ClInclude Include="src\Inky.h" />
+    <ClInclude Include="src\Pinky.h" />
     <ClInclude Include="src\TileMap.h" />
     <ClInclude Include="src\StaticImage.h" />
     <ClInclude Include="src\Sprite.h" />
