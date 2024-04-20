@@ -9,7 +9,8 @@ enum class ResourceType {
     IMG_MAP,
     IMG_ITEMS,
     IMG_PUNTUATIONS,
-    IMG_LETTERS
+    IMG_LETTERS,
+    IMG_GHOST
 };
 
 class ResourceManager {

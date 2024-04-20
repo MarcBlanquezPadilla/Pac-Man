@@ -58,6 +58,9 @@
     <ClCompile Include="src\TileMap.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ghosts.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MemoryLeaks.h">
@@ -104,6 +107,9 @@
     </ClInclude>
     <ClInclude Include="src\TileMap.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ghosts.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

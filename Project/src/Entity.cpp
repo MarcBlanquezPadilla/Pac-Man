@@ -31,6 +31,21 @@ AABB Entity::GetHitbox() const
 	AABB hitbox(p, width, height);
 	return hitbox;
 }
+
+
+
+
+AABB Entity::GetHitboxG() const
+{
+	Point p(pos.x, pos.y);
+	AABB hitbox(p, width, height);
+	return hitbox;
+}
+
+
+
+
+
 Point Entity::GetRenderingPosition() const
 {
 	Point p;

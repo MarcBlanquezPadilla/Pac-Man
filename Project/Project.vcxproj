@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>"C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib";C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib;C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,6 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>Could not find file 'C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\Ghosts.h'.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AABB.cpp" />
+    <ClCompile Include="src\Ghosts.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\LogMessages.cpp" />
@@ -162,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Ghosts.h" />
     <ClInclude Include="src\Globals.h" />
     <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\TileMap.h" />

@@ -16,6 +16,9 @@ public:
 	void Update();
 	AABB GetHitbox() const;
 
+	AABB GetHitboxG() const;
+
+
 	//Draw representation model
 	void Draw() const;
 	void DrawTint(const Color& col) const;

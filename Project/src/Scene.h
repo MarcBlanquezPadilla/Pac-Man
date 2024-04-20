@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "Object.h"
 #include "Globals.h"
+#include "Ghosts.h"
 
 enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SIZE };
 
@@ -31,6 +32,7 @@ private:
     Player* player;
     TileMap* level;
     std::vector<Object*> objects;
+    Ghost* ghost;
 
     Camera2D camera;
     DebugMode debug;

@@ -7,6 +7,7 @@ Scene::Scene()
 {
 	player = nullptr;
 	level = nullptr;
+	ghost = nullptr;
 
 	camera.target = { 0, 0 };				//Center of the screen
 	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	//Offset from the target (center of the screen)
@@ -50,6 +51,22 @@ AppStatus Scene::Init()
 		LOG("Failed to initialise Player");
 		return AppStatus::ERROR;
 	}
+
+	//Create ghost
+	ghost = new Ghost({ GHOST_SPAWN_X, GHOST_SPAWN_Y }, StateG::IDLEG, LookG::RIGHTG);
+	if (ghost == nullptr)
+	{
+		LOG("Failed to allocate memory for Player");
+		return AppStatus::ERROR;
+	}
+	//Initialise ghost
+	if (ghost->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise Player");
+		return AppStatus::ERROR;
+	}
+
+
 
 	//Create level 
 	level = new TileMap();
