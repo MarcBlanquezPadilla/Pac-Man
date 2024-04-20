@@ -17,6 +17,7 @@ public:
     void Update();
     void Render();
     void Release();
+    bool GetReturnMainMenu();
 
 private:
     AppStatus LoadLevel(int stage);
@@ -31,6 +32,8 @@ private:
     Player* player;
     TileMap* level;
     std::vector<Object*> objects;
+    int peletsCollected;
+    bool returnMainMenu;
 
     Camera2D camera;
     DebugMode debug;

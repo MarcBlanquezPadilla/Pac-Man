@@ -92,7 +92,7 @@ AppStatus Game::Update()
         break;
 
     case GameState::PLAYING:
-        if (IsKeyPressed(KEY_ESCAPE))
+        if (IsKeyPressed(KEY_ESCAPE) || scene->GetReturnMainMenu() == true) //PROVISIONAL RETURN MAIN MENU
         {
             FinishPlay();
             state = GameState::MAIN_MENU;

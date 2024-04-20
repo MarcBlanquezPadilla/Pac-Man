@@ -5,6 +5,7 @@
 
 Scene::Scene()
 {
+	returnMainMenu = false; //PROVISIONAL
 	player = nullptr;
 	level = nullptr;
 
@@ -12,6 +13,8 @@ Scene::Scene()
 	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	//Offset from the target (center of the screen)
 	camera.rotation = 0.0f;					//No rotation
 	camera.zoom = 1.0f;						//Default zoom
+
+	peletsCollected = 0;
 
 	debug = DebugMode::OFF;
 }
@@ -279,6 +282,8 @@ void Scene::CheckCollisions()
 				player->IncrScore((*it)->Points());
 				delete* it;
 				it = objects.erase(it);
+				peletsCollected++;
+				if (peletsCollected == PELETS_TO_WIN)	returnMainMenu = true;
 			}
 			else if (type == ObjectType::LARGE_PELET)
 			{
@@ -286,16 +291,21 @@ void Scene::CheckCollisions()
 			}
 			else if (type == ObjectType::RIGHT_TELEPORTER)
 			{
-				 
 				player->SetPos(Point({ LEFT_TP_POS_X, LEFT_TP_POS_Y }));
+				it++;
 			}
 			else if (type == ObjectType::LEFT_TELEPORTER)
 			{
 				player->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
+				it++;
 			}
 		}
-		it++;
+		else it++;
 	}
+}
+bool Scene::GetReturnMainMenu()
+{
+	return returnMainMenu;
 }
 
 void Scene::ClearLevel()
