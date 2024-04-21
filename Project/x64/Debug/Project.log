@@ -1,2 +1,16 @@
-﻿  TileMap.cpp
-  Project.vcxproj -> C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\x64\Debug\Project.exe
+﻿  Blinky.cpp
+  Clyde.cpp
+  Entity.cpp
+  Game.cpp
+  Ghost.cpp
+  Inky.cpp
+  Main.cpp
+  Object.cpp
+  Pinky.cpp
+  Player.cpp
+  ResourceManager.cpp
+  Scene.cpp
+  TileMap.cpp
+  Generando código...
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Object.cpp(83): warning C4715: 'Object::Points': no todas las rutas de acceso de control devuelven un valor
+  Project.vcxproj -> C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\x64\Debug\Project.exe

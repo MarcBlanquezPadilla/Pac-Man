@@ -62,8 +62,6 @@ Object::Object(const Point& pos, const Point& hitBoxPosition, ObjectType t, int 
 }
 Object::~Object()
 {
-	ResourceManager& data = ResourceManager::Instance();
-	data.ReleaseTexture(ResourceType::IMG_ITEMS);
 }
 ObjectType Object::GetObjectType()
 {

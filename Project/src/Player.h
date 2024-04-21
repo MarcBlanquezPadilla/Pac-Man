@@ -59,6 +59,7 @@ private:
 	//Animation management
 	void SetAnimation(int id);
 	PlayerAnim GetAnimation();
+	void SetCurrentDelayToAnimation(int i);
 
 	PlayerState state;
 	PlayerLook look;

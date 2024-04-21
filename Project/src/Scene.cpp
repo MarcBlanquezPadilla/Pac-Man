@@ -19,6 +19,7 @@ Scene::Scene()
 	camera.zoom = 1.0f;						//Default zoom
 
 	peletsCollected = 0;
+	munch = 1;
 
 	debug = DebugMode::OFF;
 }
@@ -68,6 +69,28 @@ Scene::~Scene()
 }
 AppStatus Scene::Init()
 {
+	ResourceManager& data = ResourceManager::Instance();
+
+	if (data.LoadTexture(ResourceType::IMG_ITEMS, "resources/sprites/ObjectsX2.png") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_MUNCH_1, "resources/sounds/FX/munch_1.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_MUNCH_2, "resources/sounds/FX/munch_2.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::MUSIC_START, "resources/sounds/Music/game_start.ogg") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
 	//Create player
 	player = new Player({ 0, 0 }, PlayerState::IDLE, PlayerLook::RIGHT);
 	if (player == nullptr)
@@ -160,6 +183,8 @@ AppStatus Scene::Init()
 	inky->SetTileMap(level);
 	clyde->SetTileMap(level);
 
+	startMusic = *data.GetSound(ResourceType::MUSIC_START);
+	PlaySound(startMusic);
 	return AppStatus::OK;
 }
 AppStatus Scene::LoadLevel(int stage)
@@ -210,7 +235,7 @@ AppStatus Scene::LoadLevel(int stage)
 			1,	-1,	-1,	-1,	-1,	-1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	-1,	-1,	-1, -1,	1,
 			1,	1,	1,	1,	1,	1,	24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 31,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	1,	1,	1,	1,	1,	1,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	29,	28,	28,	28,	28,	28,	28,	28,	28,	28,	28,	28,	28,	27,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	100,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
@@ -222,8 +247,8 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	7,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	9,	3,	3,	3,	0,	4,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	5,	0,	3,	3,	3,	8,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	100,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	0,	0,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	5,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	4,	0,	0,	0,	0,	0,	0,
@@ -332,25 +357,24 @@ AppStatus Scene::LoadLevel(int stage)
 }
 void Scene::Update()
 {
-	Point p1, p2;
-	AABB box;
-
 	//Switch between the different debug modes: off, on (sprites & hitboxes), on (hitboxes) 
 	if (IsKeyPressed(KEY_F1))
 	{
 		debug = (DebugMode)(((int)debug + 1) % (int)DebugMode::SIZE);
 	}
 	//Debug levels instantly
-	if (IsKeyPressed(KEY_ONE))		LoadLevel(1);
-	else if (IsKeyPressed(KEY_TWO))	LoadLevel(2);
-
-	level->Update();
-	player->Update();
-	blinky->Update();
-	pinky->Update();
-	inky->Update();
-	clyde->Update();
-	CheckCollisions();
+	//if (IsKeyPressed(KEY_ONE))		LoadLevel(1);
+	//else if (IsKeyPressed(KEY_TWO))	LoadLevel(2);
+	if (!IsSoundPlaying(startMusic))
+	{
+		level->Update();
+		player->Update();
+		blinky->Update();
+		pinky->Update();
+		inky->Update();
+		clyde->Update();
+		CheckCollisions();
+	}
 }
 void Scene::Render()
 {
@@ -396,16 +420,36 @@ void Scene::CheckCollisions()
 	AABB player_box, obj_box, blinky_box, pinky_box, inky_box, clyde_box;
 
 	player_box = player->GetHitbox();
+	blinky_box = blinky->GetHitbox();
+	pinky_box = pinky->GetHitbox();
+	inky_box = inky->GetHitbox();
+	clyde_box = clyde->GetHitbox();
 	
 	auto it = objects.begin();
 	while (it != objects.end())
 	{
 		obj_box = (*it)->GetHitbox();
+		ObjectType type = (*it)->GetObjectType();
 		if (player_box.TestAABB(obj_box))
 		{
-			ObjectType type = (*it)->GetObjectType();
 			if (type == ObjectType::SMALL_PELET)
 			{
+				ResourceManager& data = ResourceManager::Instance();
+				const Sound* munch_1 = data.GetSound(ResourceType::SOUND_MUNCH_1);
+				const Sound* munch_2 = data.GetSound(ResourceType::SOUND_MUNCH_2);
+				if (munch_1 != nullptr) {
+					if (!IsSoundPlaying(*munch_1) && !IsSoundPlaying(*munch_2))
+						if (munch == 1) 
+						{ 
+							PlaySound(*munch_1); 
+							munch = 2; 
+						}
+						else if (munch == 2) 
+						{ 
+							PlaySound(*munch_2); 
+							munch = 1; 
+						}
+				}
 				player->IncrScore((*it)->Points());
 				delete* it;
 				it = objects.erase(it);
@@ -419,20 +463,70 @@ void Scene::CheckCollisions()
 			else if (type == ObjectType::RIGHT_TELEPORTER)
 			{
 				player->SetPos(Point({ LEFT_TP_POS_X, LEFT_TP_POS_Y }));
-				it++;
 			}
 			else if (type == ObjectType::LEFT_TELEPORTER)
 			{
 				player->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
-				it++;
 			}
 		}
-		else it++;
+		if (blinky_box.TestAABB(obj_box))
+		{
+			if (type == ObjectType::RIGHT_TELEPORTER)
+			{
+				blinky->SetPos(Point({ LEFT_TP_POS_X, LEFT_TP_POS_Y }));
+			}
+			else if (type == ObjectType::LEFT_TELEPORTER)
+			{
+				blinky->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
+			}
+		}
+		if (pinky_box.TestAABB(obj_box))
+		{
+			if (type == ObjectType::RIGHT_TELEPORTER)
+			{
+				pinky->SetPos(Point({ LEFT_TP_POS_X, LEFT_TP_POS_Y }));
+			}
+			else if (type == ObjectType::LEFT_TELEPORTER)
+			{
+				pinky->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
+			}
+		}
+		if (inky_box.TestAABB(obj_box))
+		{
+			if (type == ObjectType::RIGHT_TELEPORTER)
+			{
+				inky->SetPos(Point({ LEFT_TP_POS_X, LEFT_TP_POS_Y }));
+			}
+			else if (type == ObjectType::LEFT_TELEPORTER)
+			{
+				inky->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
+			}
+		}
+		if (clyde_box.TestAABB(obj_box))
+		{
+			if (type == ObjectType::RIGHT_TELEPORTER)
+			{
+				clyde->SetPos(Point({ LEFT_TP_POS_X, LEFT_TP_POS_Y }));
+			}
+			else if (type == ObjectType::LEFT_TELEPORTER)
+			{
+				clyde->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
+			}
+		}
+		
+		if (type == ObjectType::SMALL_PELET)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::RIGHT_TELEPORTER)
+		{
+			it++;
+		}
+		else if (type == ObjectType::LEFT_TELEPORTER)
+		{
+			it++;
+		}
 	}
-	blinky_box = blinky->GetHitbox();
-	pinky_box = blinky->GetHitbox();
-	inky_box = blinky->GetHitbox();
-	clyde_box = clyde->GetHitbox();
 
 	if (player_box.TestAABB(blinky_box)) returnMainMenu = true;
 	if (player_box.TestAABB(pinky_box)) returnMainMenu = true;

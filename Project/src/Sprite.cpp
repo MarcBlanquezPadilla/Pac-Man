@@ -44,6 +44,10 @@ int Sprite::GetAnimation()
 {
     return current_anim;
 }
+void Sprite::SetCurrentDelay(int i)
+{
+    current_delay = i;
+}
 void Sprite::SetManualMode()
 {
     mode = AnimMode::MANUAL;

@@ -21,6 +21,7 @@ public:
     void SetAnimationDelay(int id, int delay);
     void AddKeyFrame(int id, const Rectangle& rect);
     void SetAnimation(int id);
+    void SetCurrentDelay(int delay);
     int GetAnimation();
 
     void SetManualMode();

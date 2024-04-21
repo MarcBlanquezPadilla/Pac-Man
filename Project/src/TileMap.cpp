@@ -81,11 +81,6 @@ AppStatus TileMap::Initialise()
 	}
 	img_tiles = data.GetTexture(ResourceType::IMG_MAP);
 
-	if (data.LoadTexture(ResourceType::IMG_ITEMS, "resources/sprites/ObjectsX2.png") != AppStatus::OK)
-	{
-		return AppStatus::ERROR;
-	}
-
 	return AppStatus::OK;
 }
 AppStatus TileMap::Load(int data[], int w, int h)
@@ -240,7 +235,6 @@ void TileMap::Release()
 {
 	ResourceManager& data = ResourceManager::Instance();
 	data.ReleaseTexture(ResourceType::IMG_MAP);
-
 
 	dict_tiles.clear();
 }

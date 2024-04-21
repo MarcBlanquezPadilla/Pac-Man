@@ -41,7 +41,9 @@ private:
     TileMap* level;
     std::vector<Object*> objects;
     int peletsCollected;
+    int munch;
     bool returnMainMenu;
+    Sound startMusic;
 
     Camera2D camera;
     DebugMode debug;

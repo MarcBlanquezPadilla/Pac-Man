@@ -33,6 +33,7 @@ AppStatus Game::Initialise(float scale)
 
     //Initialise window
     InitWindow((int)w, (int)h, "Pac-Man");
+    InitAudioDevice();
 
     //Render texture initialisation, used to hold the rendering result so we can easily resize it
     target = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -131,24 +132,25 @@ void Game::Render()
  }
 void Game::Cleanup()
 {
-
+    UnloadResources();
+    CloseWindow();
 }
 AppStatus Game::LoadResources()
 {
     ResourceManager& data = ResourceManager::Instance();
 
-    if (data.LoadTexture(ResourceType::IMG_LETTERS, "resources/sprites/MainMenu.png") != AppStatus::OK)
+    if (data.LoadTexture(ResourceType::IMG_MENU, "resources/sprites/MainMenu.png") != AppStatus::OK)
     {
         return AppStatus::ERROR;
     }
-    img_menu = data.GetTexture(ResourceType::IMG_LETTERS);
+    img_menu = data.GetTexture(ResourceType::IMG_MENU);
 
     return AppStatus::OK;
 }
 void Game::UnloadResources()
 {
     ResourceManager& data = ResourceManager::Instance();
-    //data.ReleaseTexture(ResourceType::IMG_MENU);
+    data.ReleaseTexture(ResourceType::IMG_MENU);
 
     UnloadRenderTexture(target);
 }

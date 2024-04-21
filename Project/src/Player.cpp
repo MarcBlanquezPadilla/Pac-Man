@@ -140,14 +140,15 @@ PlayerAnim Player::GetAnimation()
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
 	return (PlayerAnim)sprite->GetAnimation();
 }
+void Player::SetCurrentDelayToAnimation(int i)
+{
+	Sprite* sprite = dynamic_cast<Sprite*>(render);
+	sprite->SetCurrentDelay(i);
+}
 void Player::Stop()
 {
 	dir = { 0,0 };
 	state = PlayerState::IDLE;
-	if (IsLookingRight())		SetAnimation((int)PlayerAnim::BITE_RIGHT);
-	else if (IsLookingLeft())	SetAnimation((int)PlayerAnim::BITE_LEFT);
-	else if (IsLookingUp())		SetAnimation((int)PlayerAnim::BITE_UP);
-	else						SetAnimation((int)PlayerAnim::BITE_DOWN);
 }
 void Player::StartWalkingLeft()
 {
@@ -180,7 +181,14 @@ void Player::Update()
 	//Instead, uses an independent behaviour for each axis.
 	
 	ChangeMove();
-	Move();
+	if (state == PlayerState::WALKING)
+	{
+		Move();
+	}
+	else if (state == PlayerState::IDLE)
+	{
+		SetCurrentDelayToAnimation(1000); //PAUSAR ANIMACIO
+	}
 
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
 	sprite->Update();
@@ -285,7 +293,7 @@ void Player::DrawDebug(const Color& col) const
 {
 	Entity::DrawHitbox(GREEN);
 
-	DrawText(TextFormat("Position: (%d,%d)\nSize: %dx%d\nFrame: %dx%d", pos.x, pos.y, width, height, frame_width, frame_height), 18 * 16, 0, 8, LIGHTGRAY);
+	DrawText(TextFormat("Player\nPosition: (%d,%d)\nSize: %dx%d\nFrame: %dx%d\n", pos.x, pos.y, width, height, frame_width, frame_height), 0, -100, 8, LIGHTGRAY);
 	DrawPixel(pos.x, pos.y, WHITE);
 }
 
