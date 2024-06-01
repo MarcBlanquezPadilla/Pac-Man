@@ -9,6 +9,7 @@
 #include "Inky.h"
 #include "Clyde.h"
 #include "NavMesh.h"
+#include "Puntuation.h"
 
 enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SPRITES_AND_NAVMESH_ROUTES, SPRITES_AND_NAVMESH, SIZE };
 
@@ -31,6 +32,8 @@ private:
     void UpdateGhostState();
     void PlaySounds();
     void StopSoundsInException(const Sound* s);
+    void ShowPuntuation(Point position, Puntuations puntuation);
+    void EatGhostPuntuation(Point position);
     void ClearLevel();
     void RenderObjects() const;
     void RenderObjectsDebug(const Color& col) const;
@@ -45,17 +48,20 @@ private:
     Clyde* clyde;
     TileMap* level;
     NavMesh* navMesh;
+    Puntuation* puntuation1;
+    Puntuation* puntuation2;
     std::vector<Object*> objects;
 
     //VARIABLE
     int peletsCollected;
-    int totalPelets;;
+    int totalPelets;
     int munch;
     bool returnMainMenu;
     bool started;
     GhostState ghostState;
     float lastStateChangeTime;
     float timer;
+    int ghostEaten;
 
     //SOUNDS
     const Sound* startMusic;
@@ -68,6 +74,7 @@ private:
     const Sound* siren_5;
     const Sound* munch_1;
     const Sound* munch_2;
+    const Sound* eat_ghost;
 
     Camera2D camera;
     DebugMode debug;

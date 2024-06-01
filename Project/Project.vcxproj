@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Puntuation.cpp" />
     <ClCompile Include="src\Blinky.cpp" />
     <ClCompile Include="src\Clyde.cpp" />
     <ClCompile Include="src\Ghost.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Puntuation.h" />
     <ClInclude Include="src\Clyde.h" />
     <ClInclude Include="src\Ghost.h" />
     <ClInclude Include="src\Entity.h" />

@@ -76,6 +76,9 @@
     <ClCompile Include="src\NavMesh.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Puntuation.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MemoryLeaks.h">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="src\NavMesh.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Puntuation.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -22,6 +22,7 @@ enum class ResourceType {
     SOUND_SIREN_3,
     SOUND_SIREN_4,
     SOUND_SIREN_5,
+    SOUND_EAT_GHOST
 };
 
 class ResourceManager {

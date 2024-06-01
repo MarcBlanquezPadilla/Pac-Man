@@ -33,7 +33,7 @@ AppStatus Ghost::Initialise()
 	render = new Sprite(data.GetTexture(ResourceType::IMG_GHOSTS));
 	if (render == nullptr)
 	{
-		LOG("Failed to allocate memory for player sprite");
+		LOG("Failed to allocate memory for ghost sprite");
 		return AppStatus::ERROR;
 	}
 
@@ -54,6 +54,9 @@ AppStatus Ghost::Initialise()
 	sprite->SetAnimationDelay((int)GhostAnim::FRIGHTENED, ANIM_DELAY);
 	sprite->AddKeyFrame((int)GhostAnim::FRIGHTENED, { 0 * n, 4 * n, n, n });
 	sprite->AddKeyFrame((int)GhostAnim::FRIGHTENED, { 1 * n, 4 * n, n, n });
+	sprite->SetAnimationDelay((int)GhostAnim::FRIGHTENED_WHITE, ANIM_DELAY);
+	sprite->AddKeyFrame((int)GhostAnim::FRIGHTENED_WHITE, { 2 * n, 4 * n, n, n });
+	sprite->AddKeyFrame((int)GhostAnim::FRIGHTENED_WHITE, { 3 * n, 4 * n, n, n });
 	sprite->SetAnimationDelay((int)GhostAnim::EATEN_UP, ANIM_DELAY);
 	sprite->AddKeyFrame((int)GhostAnim::EATEN_UP, { 6 * n, 4 * n, n, n });
 	sprite->SetAnimationDelay((int)GhostAnim::EATEN_DOWN, ANIM_DELAY);
@@ -112,33 +115,32 @@ void Ghost::StartWalkingLeft()
 {
 	direction = Directions::LEFT;
 	if(state == GhostState::SCATTLE || state == GhostState::CHASE) SetAnimation((int)GhostAnim::WALK_LEFT);
-	else if(state == GhostState::FRIGHTENED) SetAnimation((int)GhostAnim::FRIGHTENED);
+	else if(state == GhostState::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED_WHITE) SetAnimation((int)GhostAnim::FRIGHTENED);
 	else if(state == GhostState::EATEN) SetAnimation((int)GhostAnim::EATEN_LEFT);
 }
 void Ghost::StartWalkingRight()
 {
 	direction = Directions::RIGHT;
 	if (state == GhostState::SCATTLE || state == GhostState::CHASE) SetAnimation((int)GhostAnim::WALK_RIGHT);
-	else if (state == GhostState::FRIGHTENED) SetAnimation((int)GhostAnim::FRIGHTENED);
+	else if (state == GhostState::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED_WHITE) SetAnimation((int)GhostAnim::FRIGHTENED);
 	else if (state == GhostState::EATEN) SetAnimation((int)GhostAnim::EATEN_RIGHT);
 }
 void Ghost::StartWalkingUp()
 {
 	direction = Directions::UP;
 	if (state == GhostState::SCATTLE || state == GhostState::CHASE) SetAnimation((int)GhostAnim::WALK_UP);
-	else if (state == GhostState::FRIGHTENED) SetAnimation((int)GhostAnim::FRIGHTENED);
+	else if (state == GhostState::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED_WHITE) SetAnimation((int)GhostAnim::FRIGHTENED);
 	else if (state == GhostState::EATEN) SetAnimation((int)GhostAnim::EATEN_UP);
 }
 void Ghost::StartWalkingDown()
 {
 	direction = Directions::DOWN;
 	if (state == GhostState::SCATTLE || state == GhostState::CHASE) SetAnimation((int)GhostAnim::WALK_DOWN);
-	else if (state == GhostState::FRIGHTENED) SetAnimation((int)GhostAnim::FRIGHTENED);
+	else if (state == GhostState::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED && GetAnimation() != GhostAnim::FRIGHTENED_WHITE) SetAnimation((int)GhostAnim::FRIGHTENED);
 	else if (state == GhostState::EATEN) SetAnimation((int)GhostAnim::EATEN_DOWN);
 }
 void Ghost::UpdateStates()
 {
-
 	switch (state)
 	{
 	case GhostState::CHASE:
@@ -153,6 +155,18 @@ void Ghost::UpdateStates()
 		float currentTime = static_cast<float>(GetTime());
 		float elapsedTime = currentTime - stateChangeTime;
 		if (elapsedTime >= TIME_IN_FRIGHTENED) ChangeState(commonState);
+		else {
+			if (elapsedTime >= TIME_TO_BLINK)
+			{
+				float partOfSecond = fmod(elapsedTime, 1.0f);
+				if (partOfSecond < 0.5f) {
+					if (GetAnimation() != GhostAnim::FRIGHTENED_WHITE)SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED_WHITE));
+				}
+				else {
+					if (GetAnimation() != GhostAnim::FRIGHTENED)SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED));
+				}
+			}
+		}
 		break;
 	}
 	case GhostState::EATEN:

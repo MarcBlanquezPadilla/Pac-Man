@@ -13,6 +13,8 @@ Scene::Scene()
 	clyde = nullptr;
 	level = nullptr;
 	navMesh = nullptr;
+	puntuation1 = nullptr;
+	puntuation2 = nullptr;
 
 	camera.target = { 0, 0 };				//Center of the screen
 	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	//Offset from the target (center of the screen)
@@ -22,6 +24,7 @@ Scene::Scene()
 	totalPelets = 0;
 	peletsCollected = 0;
 	munch = 1;
+	ghostEaten = 0;
 
 	debug = DebugMode::OFF;
 }
@@ -62,6 +65,23 @@ Scene::~Scene()
 		level->Release();
 		delete level;
 		level = nullptr;
+	}
+	if (navMesh != nullptr)
+	{
+		delete navMesh;
+		navMesh = nullptr;
+	}
+	if (puntuation1 != nullptr)
+	{
+		puntuation1->Release();
+		delete puntuation1;
+		puntuation1 = nullptr;
+	}
+	if (puntuation2 != nullptr)
+	{
+		puntuation2->Release();
+		delete puntuation2;
+		puntuation2 = nullptr;
 	}
 	for (Entity* obj : objects)
 	{
@@ -128,6 +148,11 @@ AppStatus Scene::Init()
 		return AppStatus::ERROR;
 	}
 
+	if (data.LoadSound(ResourceType::SOUND_EAT_GHOST, "resources/sounds/FX/eat_ghost.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
 	startMusic = data.GetSound(ResourceType::MUSIC_START);
 	power_pellet = data.GetSound(ResourceType::SOUND_POWER_PELLET);
 	retreating = data.GetSound(ResourceType::SOUND_RETREATING);
@@ -138,6 +163,7 @@ AppStatus Scene::Init()
 	siren_5 = data.GetSound(ResourceType::SOUND_SIREN_5);
 	munch_1 = data.GetSound(ResourceType:: SOUND_MUNCH_1);
 	munch_2 = data.GetSound(ResourceType:: SOUND_MUNCH_2);
+	eat_ghost = data.GetSound(ResourceType::SOUND_EAT_GHOST);
 
 	//Create player
 	player = new Player({ 0, 0 }, PlayerState::IDLE, Directions::RIGHT);
@@ -225,12 +251,37 @@ AppStatus Scene::Init()
 		return AppStatus::ERROR;
 	}
 
+	//Create puntuation
+	puntuation1 = new Puntuation({ 0,0 });
+	if (navMesh == nullptr)
+	{
+		LOG("Failed to allocate memory for Navigation Mesh");
+		return AppStatus::ERROR;
+	}
+	if (puntuation1->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise puntuation");
+		return AppStatus::ERROR;
+	}
+	puntuation2 = new Puntuation({ 0,0 });
+	if (navMesh == nullptr)
+	{
+		LOG("Failed to allocate memory for Navigation Mesh");
+		return AppStatus::ERROR;
+	}
+	if (puntuation2->Initialise() != AppStatus::OK)
+	{
+		LOG("Failed to initialise puntuation");
+		return AppStatus::ERROR;
+	}
+
 	//Load level
 	if (LoadLevel(1) != AppStatus::OK)
 	{
 		LOG("Failed to load Level 1");
 		return AppStatus::ERROR;
 	}
+
 
 	//Assign the tile map reference to the player to check collisions while navigating
 	player->SetTileMap(level);
@@ -491,6 +542,8 @@ void Scene::Update()
 		pinky->Update();
 		inky->Update();
 		clyde->Update();
+		puntuation1->Update();
+		puntuation2->Update();
 		CheckCollisions();
 		PlaySounds();
 	}
@@ -578,6 +631,10 @@ void Scene::Render()
 		pinky->Draw();
 		inky->Draw();
 		clyde->Draw();
+		if (puntuation1->ReturnHaveToRender()) 
+			puntuation1->Draw();
+		if (puntuation2->ReturnHaveToRender()) 
+			puntuation2->Draw();
 	}
 	level->RenderEmptys();
 	if (debug == DebugMode::SPRITES_AND_HITBOXES || debug == DebugMode::ONLY_HITBOXES)
@@ -603,6 +660,18 @@ void Scene::Release()
 	pinky->Release();
 	inky->Release();
 	clyde->Release();
+	ResourceManager& data = ResourceManager::Instance();
+	data.ReleaseSound(ResourceType::SOUND_SIREN_1);
+	data.ReleaseSound(ResourceType::SOUND_SIREN_2);
+	data.ReleaseSound(ResourceType::SOUND_SIREN_3);
+	data.ReleaseSound(ResourceType::SOUND_SIREN_4);
+	data.ReleaseSound(ResourceType::SOUND_SIREN_5);
+	data.ReleaseSound(ResourceType::SOUND_POWER_PELLET);
+	data.ReleaseSound(ResourceType::SOUND_RETREATING);
+	data.ReleaseSound(ResourceType::SOUND_MUNCH_2);
+	data.ReleaseSound(ResourceType::SOUND_MUNCH_1);
+	data.ReleaseSound(ResourceType::MUSIC_START);
+	data.ReleaseSound(ResourceType::SOUND_EAT_GHOST);
 	ClearLevel();
 }
 void Scene::UpdateGhostState()
@@ -611,9 +680,13 @@ void Scene::UpdateGhostState()
 	float currentTime = static_cast<float>(GetTime());
 	float elapsedTime = currentTime - lastStateChangeTime;
 
+	float percent = static_cast<float>(peletsCollected) / static_cast<float>(totalPelets) * 100;
+	
+	if (percent >= BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(GhostState::CHASE);
+
 	if (ghostState == GhostState::SCATTLE && elapsedTime >= TIME_IN_SCATTER) {
 		ghostState = GhostState::CHASE;
-		blinky->ChangeCommonState(ghostState);
+		if (percent < BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(ghostState);
 		pinky->ChangeCommonState(ghostState);
 		inky->ChangeCommonState(ghostState);
 		clyde->ChangeCommonState(ghostState);
@@ -621,7 +694,7 @@ void Scene::UpdateGhostState()
 	}
 	else if (ghostState == GhostState::CHASE && elapsedTime >= TIME_IN_CHASE) {
 		ghostState = GhostState::SCATTLE;
-		blinky->ChangeCommonState(ghostState);
+		if (percent < BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(ghostState);
 		pinky->ChangeCommonState(ghostState);
 		inky->ChangeCommonState(ghostState);
 		clyde->ChangeCommonState(ghostState);
@@ -668,12 +741,13 @@ void Scene::CheckCollisions()
 			}
 			else if (type == ObjectType::LARGE_PELET)
 			{
-				blinky->ChangeState(GhostState::FRIGHTENED);
-				pinky->ChangeState(GhostState::FRIGHTENED);
-				inky->ChangeState(GhostState::FRIGHTENED);
-				clyde->ChangeState(GhostState::FRIGHTENED);
+				if (blinky->GetState()!=GhostState::EATEN)blinky->ChangeState(GhostState::FRIGHTENED);
+				if (pinky->GetState() != GhostState::EATEN)pinky->ChangeState(GhostState::FRIGHTENED);
+				if (inky->GetState() != GhostState::EATEN)inky->ChangeState(GhostState::FRIGHTENED);
+				if (clyde->GetState() != GhostState::EATEN)clyde->ChangeState(GhostState::FRIGHTENED);
 				delete* it;
 				it = objects.erase(it);
+				ghostEaten = 0;
 			}
 			else if (type == ObjectType::RIGHT_TELEPORTER)
 			{
@@ -752,6 +826,8 @@ void Scene::CheckCollisions()
 		if (blinky->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
 			blinky->ChangeState(GhostState::EATEN); 
+			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
+			EatGhostPuntuation(blinky->GetCenterPosition());
 		}
 		else if (blinky->GetState() == GhostState::SCATTLE || blinky->GetState() == GhostState::CHASE) returnMainMenu = true;
 	}
@@ -760,6 +836,8 @@ void Scene::CheckCollisions()
 		if (pinky->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
 			pinky->ChangeState(GhostState::EATEN); 
+			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
+			EatGhostPuntuation(pinky->GetCenterPosition());
 		}
 		else if (pinky->GetState() == GhostState::SCATTLE || pinky->GetState() == GhostState::CHASE) returnMainMenu = true;
 	}
@@ -768,6 +846,8 @@ void Scene::CheckCollisions()
 		if (inky->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
 			inky->ChangeState(GhostState::EATEN); 
+			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
+			EatGhostPuntuation(inky->GetCenterPosition());
 		}
 		else if (inky->GetState() == GhostState::SCATTLE || inky->GetState() == GhostState::CHASE) returnMainMenu = true;
 	}
@@ -776,6 +856,8 @@ void Scene::CheckCollisions()
 		if (clyde->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
 			clyde->ChangeState(GhostState::EATEN); 
+			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
+			EatGhostPuntuation(clyde->GetCenterPosition());
 		}
 		else if (clyde->GetState() == GhostState::SCATTLE || clyde->GetState() == GhostState::CHASE) returnMainMenu = true;
 	}
@@ -785,7 +867,36 @@ bool Scene::GetReturnMainMenu()
 {
 	return returnMainMenu;
 }
-
+void Scene::ShowPuntuation(Point position, Puntuations puntuation)
+{
+	if (!puntuation1->ReturnHaveToRender()) puntuation1->ShowPuntuation(position, puntuation);
+	else if (!puntuation2->ReturnHaveToRender()) puntuation2->ShowPuntuation(position, puntuation);
+}
+void Scene::EatGhostPuntuation(Point position)
+{
+	switch (ghostEaten)
+	{
+	case 0:
+		ShowPuntuation(position, Puntuations::P_200);
+		player->IncrScore(200);
+		break;
+	case 1:
+		ShowPuntuation(position, Puntuations::P_400);
+		player->IncrScore(400);
+		break;
+	case 2:
+		ShowPuntuation(position, Puntuations::P_800);
+		player->IncrScore(800);
+		break;
+	case 3:
+		ShowPuntuation(position, Puntuations::P_1600);
+		player->IncrScore(1600);
+		break;
+	default:
+		break;
+	}
+	ghostEaten++;
+}
 void Scene::ClearLevel()
 {
 	for (Object* obj : objects)
