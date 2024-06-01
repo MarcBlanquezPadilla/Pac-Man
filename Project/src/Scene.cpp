@@ -19,6 +19,7 @@ Scene::Scene()
 	camera.rotation = 0.0f;					//No rotation
 	camera.zoom = 1.0f;						//Default zoom
 
+	totalPelets = 0;
 	peletsCollected = 0;
 	munch = 1;
 
@@ -91,6 +92,52 @@ AppStatus Scene::Init()
 	{
 		return AppStatus::ERROR;
 	}
+
+	if (data.LoadSound(ResourceType::SOUND_RETREATING, "resources/sounds/FX/retreating.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+	
+	if (data.LoadSound(ResourceType::SOUND_POWER_PELLET, "resources/sounds/FX/power_pellet.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_SIREN_1, "resources/sounds/FX/siren_1.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_SIREN_2, "resources/sounds/FX/siren_2.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_SIREN_3, "resources/sounds/FX/siren_3.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_SIREN_4, "resources/sounds/FX/siren_4.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	if (data.LoadSound(ResourceType::SOUND_SIREN_5, "resources/sounds/FX/siren_5.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
+	startMusic = data.GetSound(ResourceType::MUSIC_START);
+	power_pellet = data.GetSound(ResourceType::SOUND_POWER_PELLET);
+	retreating = data.GetSound(ResourceType::SOUND_RETREATING);
+	siren_1 = data.GetSound(ResourceType::SOUND_SIREN_1);
+	siren_2 = data.GetSound(ResourceType::SOUND_SIREN_2);
+	siren_3 = data.GetSound(ResourceType::SOUND_SIREN_3);
+	siren_4 = data.GetSound(ResourceType::SOUND_SIREN_4);
+	siren_5 = data.GetSound(ResourceType::SOUND_SIREN_5);
+	munch_1 = data.GetSound(ResourceType:: SOUND_MUNCH_1);
+	munch_2 = data.GetSound(ResourceType:: SOUND_MUNCH_2);
 
 	//Create player
 	player = new Player({ 0, 0 }, PlayerState::IDLE, Directions::RIGHT);
@@ -204,8 +251,7 @@ AppStatus Scene::Init()
 	started = false;
 	ghostState = GhostState::SCATTLE;
 	lastStateChangeTime = 0;
-	startMusic = *data.GetSound(ResourceType::MUSIC_START);
-	PlaySound(startMusic);
+	PlaySound(*startMusic);
 	return AppStatus::OK;
 }
 AppStatus Scene::LoadLevel(int stage)
@@ -384,6 +430,7 @@ AppStatus Scene::LoadLevel(int stage)
 				obj = new Object(pos, pHitBox, ObjectType::SMALL_PELET, SMALL_OBJECT_SIZE, SMALL_OBJECT_SIZE / 2 );
 				objects.push_back(obj);
 				map[i] = 0;
+				totalPelets++;
 			}
 			else if (tile == Tile::LARGE_PELET)
 			{
@@ -427,7 +474,7 @@ AppStatus Scene::LoadLevel(int stage)
 }
 void Scene::Update()
 {
-	started = !IsSoundPlaying(startMusic);
+	started = !IsSoundPlaying(*startMusic);
 
 	//Switch between the different debug modes: off, on (sprites & hitboxes), on (hitboxes) 
 	if (IsKeyPressed(KEY_F1))
@@ -445,7 +492,66 @@ void Scene::Update()
 		inky->Update();
 		clyde->Update();
 		CheckCollisions();
+		PlaySounds();
 	}
+}
+void Scene::PlaySounds()
+{
+	const Sound* currentSound = nullptr;
+
+	if (blinky->GetState() == GhostState::EATEN || pinky->GetState() == GhostState::EATEN || inky->GetState() == GhostState::EATEN || clyde->GetState() == GhostState::EATEN)
+	{
+		currentSound = retreating;
+	}
+	else if (blinky->GetState() == GhostState::FRIGHTENED || pinky->GetState() == GhostState::FRIGHTENED || inky->GetState() == GhostState::FRIGHTENED || clyde->GetState() == GhostState::FRIGHTENED)
+	{
+		currentSound = power_pellet;
+	}
+	else
+	{
+		float percent = static_cast<float>(peletsCollected) / static_cast<float>(totalPelets) * 100;
+
+		if (percent < 30)
+		{
+			currentSound = siren_1;
+		}
+		else if (percent < 50)
+		{
+			currentSound = siren_2;
+		}
+		else if (percent < 65)
+		{
+			currentSound = siren_3;
+		}
+		else if (percent < 80)
+		{
+			currentSound = siren_4;
+		}
+		else if (percent < 90)
+		{
+			currentSound = siren_5;
+		}
+	}
+
+	// Stop all sounds except the current one
+	StopSoundsInException(currentSound);
+
+	// Play the current sound if it's not already playing
+	if (currentSound && !IsSoundPlaying(*currentSound))
+	{
+		PlaySound(*currentSound);
+	}
+}
+
+void Scene::StopSoundsInException(const Sound* sound)
+{
+	if (retreating != sound && IsSoundPlaying(*retreating)) StopSound(*retreating);
+	if (power_pellet != sound && IsSoundPlaying(*power_pellet)) StopSound(*power_pellet);
+	if (siren_1 != sound && IsSoundPlaying(*siren_1)) StopSound(*siren_1);
+	if (siren_2 != sound && IsSoundPlaying(*siren_2)) StopSound(*siren_2);
+	if (siren_3 != sound && IsSoundPlaying(*siren_3)) StopSound(*siren_3);
+	if (siren_4 != sound && IsSoundPlaying(*siren_4)) StopSound(*siren_4);
+	if (siren_5 != sound && IsSoundPlaying(*siren_5)) StopSound(*siren_5);
 }
 void Scene::Render()
 {
@@ -541,9 +647,6 @@ void Scene::CheckCollisions()
 		{
 			if (type == ObjectType::SMALL_PELET)
 			{
-				ResourceManager& data = ResourceManager::Instance();
-				const Sound* munch_1 = data.GetSound(ResourceType::SOUND_MUNCH_1);
-				const Sound* munch_2 = data.GetSound(ResourceType::SOUND_MUNCH_2);
 				if (munch_1 != nullptr) {
 					if (!IsSoundPlaying(*munch_1) && !IsSoundPlaying(*munch_2))
 						if (munch == 1) 
@@ -561,7 +664,7 @@ void Scene::CheckCollisions()
 				delete* it;
 				it = objects.erase(it);
 				peletsCollected++;
-				if (peletsCollected == PELETS_TO_WIN)	returnMainMenu = true;
+				if (peletsCollected == totalPelets)	returnMainMenu = true;
 			}
 			else if (type == ObjectType::LARGE_PELET)
 			{

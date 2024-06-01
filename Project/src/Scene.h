@@ -29,12 +29,15 @@ private:
 
     void CheckCollisions();
     void UpdateGhostState();
+    void PlaySounds();
+    void StopSoundsInException(const Sound* s);
     void ClearLevel();
     void RenderObjects() const;
     void RenderObjectsDebug(const Color& col) const;
 
     void RenderGUI() const;
 
+    //REFERENCES
     Player* player;
     Blinky* blinky;
     Pinky* pinky;
@@ -43,14 +46,28 @@ private:
     TileMap* level;
     NavMesh* navMesh;
     std::vector<Object*> objects;
+
+    //VARIABLE
     int peletsCollected;
+    int totalPelets;;
     int munch;
     bool returnMainMenu;
     bool started;
-    Sound startMusic;
     GhostState ghostState;
     float lastStateChangeTime;
     float timer;
+
+    //SOUNDS
+    const Sound* startMusic;
+    const Sound* retreating;
+    const Sound* power_pellet;
+    const Sound* siren_1;
+    const Sound* siren_2;
+    const Sound* siren_3;
+    const Sound* siren_4;
+    const Sound* siren_5;
+    const Sound* munch_1;
+    const Sound* munch_2;
 
     Camera2D camera;
     DebugMode debug;

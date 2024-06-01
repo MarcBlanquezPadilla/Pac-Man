@@ -14,7 +14,14 @@ enum class ResourceType {
     IMG_MENU,
     SOUND_MUNCH_1,
     SOUND_MUNCH_2,
-    MUSIC_START
+    MUSIC_START,
+    SOUND_RETREATING,
+    SOUND_POWER_PELLET,
+    SOUND_SIREN_1,
+    SOUND_SIREN_2,
+    SOUND_SIREN_3,
+    SOUND_SIREN_4,
+    SOUND_SIREN_5,
 };
 
 class ResourceManager {
