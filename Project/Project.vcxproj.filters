@@ -64,14 +64,17 @@
     <ClCompile Include="src\Blinky.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pinky.cpp">
-      <Filter>Application</Filter>
+    <ClCompile Include="src\Clyde.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Inky.cpp">
-      <Filter>Application</Filter>
+      <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Clyde.cpp">
-      <Filter>Application</Filter>
+    <ClCompile Include="src\Pinky.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NavMesh.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,9 +126,20 @@
     <ClInclude Include="src\Ghost.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Blinky.h" />
-    <ClInclude Include="src\Pinky.h" />
-    <ClInclude Include="src\Inky.h" />
-    <ClInclude Include="src\Clyde.h" />
+    <ClInclude Include="src\Blinky.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Clyde.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Inky.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pinky.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NavMesh.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,11 +5,11 @@
 #include <raymath.h>
 #include "LogMessages.h"
 
-Player::Player(const Point& p, PlayerState s, PlayerLook view) :
+Player::Player(const Point& p, PlayerState s, Directions dir) :
 	Entity(p, PLAYER_PHYSICAL_WIDTH, PLAYER_PHYSICAL_HEIGHT, PLAYER_FRAME_SIZE, PLAYER_FRAME_SIZE)
 {
 	state = s;
-	look = view;
+	direction = dir;
 	map = nullptr;
 	score = 0;
 }
@@ -68,7 +68,7 @@ AppStatus Player::Initialise()
 		sprite->AddKeyFrame((int)PlayerAnim::DIE, { (float)i * n, 1, n, n });
 	
 	state = PlayerState::WALKING;
-	look = PlayerLook::RIGHT;
+	direction = Directions::RIGHT;
 	SetAnimation((int)PlayerAnim::BITE_RIGHT);
 
 	return AppStatus::OK;
@@ -91,19 +91,19 @@ void Player::SetTileMap(TileMap* tilemap)
 }
 bool Player::IsLookingRight() const
 {
-	return look == PlayerLook::RIGHT;
+	return direction == Directions::RIGHT;
 }
 bool Player::IsLookingLeft() const
 {
-	return look == PlayerLook::LEFT;
+	return direction == Directions::LEFT;
 }
 bool Player::IsLookingUp() const
 {
-	return look == PlayerLook::UP;
+	return direction == Directions::UP;
 }
 bool Player::IsLookingDown() const
 {
-	return look == PlayerLook::DOWN;
+	return direction == Directions::DOWN;
 }
 bool Player::JustOneKeyIsDown()
 {	
@@ -153,33 +153,30 @@ void Player::Stop()
 void Player::StartWalkingLeft()
 {
 	state = PlayerState::WALKING;
-	look = PlayerLook::LEFT;
+	direction = Directions::LEFT;
 	SetAnimation((int)PlayerAnim::BITE_LEFT);
 }
 void Player::StartWalkingRight()
 {
 	state = PlayerState::WALKING;
-	look = PlayerLook::RIGHT;
+	direction = Directions::RIGHT;
 	SetAnimation((int)PlayerAnim::BITE_RIGHT);
 }
 void Player::StartWalkingUp()
 {
 	state = PlayerState::WALKING;
-	look = PlayerLook::UP;
+	direction = Directions::UP;
 	SetAnimation((int)PlayerAnim::BITE_UP);
 }
 void Player::StartWalkingDown()
 {
 	state = PlayerState::WALKING;
-	look = PlayerLook::DOWN;
+	direction = Directions::DOWN;
 	SetAnimation((int)PlayerAnim::BITE_DOWN);
 }
 
 void Player::Update()
 {
-	//Player doesn't use the "Entity::Update() { pos += dir; }" default behaviour.
-	//Instead, uses an independent behaviour for each axis.
-	
 	ChangeMove();
 	if (state == PlayerState::WALKING)
 	{
@@ -200,7 +197,7 @@ void Player::Move()
 	int prev_x = pos.x;
 	int prev_y = pos.y;
 
-	if (look == PlayerLook::RIGHT)
+	if (direction == Directions::RIGHT)
 	{
 		pos.x += PLAYER_SPEED;
 
@@ -211,7 +208,7 @@ void Player::Move()
 			if (state == PlayerState::WALKING) Stop();
 		}
 	}
-	else if (look == PlayerLook::LEFT)
+	else if (direction == Directions::LEFT)
 	{
 		pos.x += -PLAYER_SPEED;
 
@@ -222,7 +219,7 @@ void Player::Move()
 			if (state == PlayerState::WALKING) Stop();
 		}
 	}
-	else if (look == PlayerLook::UP)
+	else if (direction == Directions::UP)
 	{
 		pos.y += -PLAYER_SPEED;
 
@@ -254,7 +251,7 @@ void Player::ChangeMove()
 		int prev_x = pos.x;
 		int prev_y = pos.y;
 
-		if (IsKeyDown(KEY_LEFT) && look != PlayerLook::LEFT)
+		if (IsKeyDown(KEY_LEFT) && direction != Directions::LEFT)
 		{
 			pos.x += -PLAYER_SPEED;
 
@@ -262,21 +259,21 @@ void Player::ChangeMove()
 			if (!map->TestCollisionWallLeft(box))
 				StartWalkingLeft();
 		}
-		else if (IsKeyDown(KEY_RIGHT) && look != PlayerLook::RIGHT)
+		else if (IsKeyDown(KEY_RIGHT) && direction != Directions::RIGHT)
 		{
 			pos.x += PLAYER_SPEED;
 
 			box = GetHitbox();
 			if (!map->TestCollisionWallRight(box)) StartWalkingRight();
 		}
-		else if (IsKeyDown(KEY_UP) && look != PlayerLook::UP)
+		else if (IsKeyDown(KEY_UP) && direction != Directions::UP)
 		{
 			pos.y += -PLAYER_SPEED;
 
 			box = GetHitbox();
 			if (!map->TestCollisionWallUp(box)) StartWalkingUp();
 		}
-		else if (IsKeyDown(KEY_DOWN) && look != PlayerLook::DOWN)
+		else if (IsKeyDown(KEY_DOWN) && direction != Directions::DOWN)
 		{
 			pos.y += PLAYER_SPEED;
 
@@ -288,13 +285,19 @@ void Player::ChangeMove()
 	}
 }
 
+Directions Player::GetDirection()
+{
+	return direction;
+}
 
-void Player::DrawDebug(const Color& col) const
+
+void Player::DrawDebug(const Color& col)
 {
 	Entity::DrawHitbox(GREEN);
 
 	DrawText(TextFormat("Player\nPosition: (%d,%d)\nSize: %dx%d\nFrame: %dx%d\n", pos.x, pos.y, width, height, frame_width, frame_height), 0, -100, 8, LIGHTGRAY);
-	DrawPixel(pos.x, pos.y, WHITE);
+	DrawPixel(pos.x, pos.y, WHITE); 
+	DrawPixel(GetCenterPosition().x, GetCenterPosition().y, RED);
 }
 
 void Player::Release()

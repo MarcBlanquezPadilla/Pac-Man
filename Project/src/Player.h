@@ -14,7 +14,6 @@
 
 //Logic states
 enum class PlayerState { IDLE, WALKING, DEAD };
-enum class PlayerLook { RIGHT, LEFT, UP, DOWN };
 
 //Rendering states
 enum class PlayerAnim {
@@ -26,7 +25,7 @@ enum class PlayerAnim {
 class Player : public Entity
 {
 public:
-	Player(const Point& p, PlayerState s, PlayerLook view);
+	Player(const Point& p, PlayerState s, Directions dir);
 	~Player();
 
 	AppStatus Initialise();
@@ -37,8 +36,9 @@ public:
 	int GetScore();
 
 	void Update();
-	void DrawDebug(const Color& col) const;
+	void DrawDebug(const Color& col);
 	void Release();
+	Directions GetDirection();
 
 private:
 	bool IsLookingRight() const;
@@ -62,7 +62,7 @@ private:
 	void SetCurrentDelayToAnimation(int i);
 
 	PlayerState state;
-	PlayerLook look;
+	Directions direction;
 
 	TileMap* map;
 

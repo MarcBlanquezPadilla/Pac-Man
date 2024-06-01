@@ -85,6 +85,7 @@ AppStatus ResourceManager::LoadMusic(ResourceType id, const std::string& file_pa
     musics[id] = music;
     return AppStatus::OK;
 }
+
 void ResourceManager::ReleaseMusic(ResourceType id)
 {
     //Find the music associated with the key
@@ -142,10 +143,10 @@ void ResourceManager::Release()
     {
         UnloadSound(pair.second);
     }
-    textures.clear();
+    sounds.clear();
     for (auto& pair : musics)
     {
         UnloadMusicStream(pair.second);
     }
-    textures.clear();
+    musics.clear();
 }

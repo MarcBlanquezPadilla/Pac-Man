@@ -74,7 +74,6 @@ void Object::DrawDebug(const Color& col) const
 int Object::Points() const
 {
 	if (type == ObjectType::SMALL_PELET) return POINTS_SMALL_PELET;
-	else if (type == ObjectType::LARGE_PELET) {}
 	else
 	{
 		LOG("Internal error: object type invalid when giving points");

@@ -37,6 +37,11 @@ AABB Entity::GetHitbox() const
 	AABB hitbox(p, width, height);
 	return hitbox;
 }
+Point Entity::GetCenterPosition()
+{
+	Point p(pos.x + width / 2, pos.y + height / 2);
+	return p;
+}
 Point Entity::GetRenderingPosition() const
 {
 	Point p(pos.x,pos.y);
@@ -68,4 +73,18 @@ void Entity::DrawHitbox(int x, int y, int w, int h, const Color& col) const
 
 	render->DrawBox(x, y, w, h, c);
 	render->DrawCorners(x, y, w, h);
+}
+
+int Entity::CalculateDistanceWithCenter(Point p)
+{
+	int dx = GetCenterPosition().x - p.x;
+	int dy = GetCenterPosition().y - p.y;
+	return static_cast<int>(std::sqrt(dx * dx + dy * dy));
+}
+
+int Entity::CalculateDistance(Point p)
+{
+	int dx = pos.x - p.x;
+	int dy = pos.y - p.y;
+	return static_cast<float>(std::sqrt(dx * dx + dy * dy));
 }

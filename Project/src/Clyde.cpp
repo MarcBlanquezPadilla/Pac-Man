@@ -5,55 +5,39 @@
 #include <raymath.h>
 #include "LogMessages.h"
 
-Clyde::Clyde(const Point& p, GhostState s, GhostLook view) : Ghost(p, s, view)
+Clyde::Clyde(const Point& p, GhostState s, Directions d) : Ghost(p, s, d)
 {
-	state = s;
-	look = view;
+	type = GhostType::CLYDE;
 	map = nullptr;
 	score = 0;
 }
 
-AppStatus Clyde::Initialise()
+
+void Clyde::Update()
 {
-	int i;
-	const int n = GHOST_FRAME_SIZE;
+	UpdateStates();
 
-	ResourceManager& data = ResourceManager::Instance();
-	if (data.LoadTexture(ResourceType::IMG_GHOSTS, "resources/sprites/GhostsX2.png") != AppStatus::OK)
+	if (state == GhostState::SCATTLE) 
 	{
-		return AppStatus::ERROR;
+		GoPath({ CLYDE_SCATTER_X, CLYDE_SCATTER_Y });
+	}
+	else if (state == GhostState::CHASE)
+	{
+		if (CalculateDistanceWithCenter(player->GetCenterPosition()) > CLYDE_MAX_DIST) GoPath(player->GetCenterPosition());
+		else GoPath({ CLYDE_SCATTER_X, CLYDE_SCATTER_Y });
+	}
+	else if (state == GhostState::FRIGHTENED)
+	{
+		MoveRandomly();
+	}
+	else if (state == GhostState::EATEN)
+	{
+		if (navMesh->RightHalf(navMesh->GetPathIndex(GetCenterPosition().x, GetCenterPosition().y))) GoPath({ RIGHT_SPAWN_POS_X, SPAWN_POS_Y });
+		else GoPath({ LEFT_SPAWN_POS_X, SPAWN_POS_Y });
 	}
 
-	render = new Sprite(data.GetTexture(ResourceType::IMG_GHOSTS));
-	if (render == nullptr)
-	{
-		LOG("Failed to allocate memory for player sprite");
-		return AppStatus::ERROR;
-	}
+	Move();
 
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
-	sprite->SetNumberAnimations((int)GhostAnim::NUM_ANIMATIONS);
-
-	sprite->SetAnimationDelay((int)GhostAnim::WALK_RIGHT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)GhostAnim::WALK_RIGHT, { 0 * n, 3 * n, n, n });
-	sprite->AddKeyFrame((int)GhostAnim::WALK_RIGHT, { 1 * n, 3 * n, n, n });
-	sprite->SetAnimationDelay((int)GhostAnim::WALK_LEFT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)GhostAnim::WALK_LEFT, { 2 * n, 3 * n, n, n });
-	sprite->AddKeyFrame((int)GhostAnim::WALK_LEFT, { 3 * n, 3 * n, n, n });
-	sprite->SetAnimationDelay((int)GhostAnim::WALK_UP, ANIM_DELAY);
-	sprite->AddKeyFrame((int)GhostAnim::WALK_UP, { 4 * n, 3 * n, n, n });
-	sprite->AddKeyFrame((int)GhostAnim::WALK_UP, { 5 * n, 3 * n, n, n });
-	sprite->SetAnimationDelay((int)GhostAnim::WALK_DOWN, ANIM_DELAY);
-	sprite->AddKeyFrame((int)GhostAnim::WALK_DOWN, { 6 * n, 3 * n, n, n });
-	sprite->AddKeyFrame((int)GhostAnim::WALK_DOWN, { 7 * n, 3 * n, n, n });
-
-	sprite->SetAnimationDelay((int)GhostAnim::DIE, ANIM_DELAY);
-	for (i = 0; i < 11; ++i)
-		sprite->AddKeyFrame((int)GhostAnim::DIE, { (float)i * n, 1, n, n });
-
-	state = GhostState::WALKING;
-	look = GhostLook::RIGHT;
-	SetAnimation((int)GhostAnim::WALK_RIGHT);
-
-	return AppStatus::OK;
+	sprite->Update();
 }

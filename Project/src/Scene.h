@@ -8,8 +8,9 @@
 #include "Pinky.h"
 #include "Inky.h"
 #include "Clyde.h"
+#include "NavMesh.h"
 
-enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SIZE };
+enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SPRITES_AND_NAVMESH_ROUTES, SPRITES_AND_NAVMESH, SIZE };
 
 class Scene
 {
@@ -27,6 +28,7 @@ private:
     AppStatus LoadLevel(int stage);
 
     void CheckCollisions();
+    void UpdateGhostState();
     void ClearLevel();
     void RenderObjects() const;
     void RenderObjectsDebug(const Color& col) const;
@@ -39,11 +41,16 @@ private:
     Inky* inky;
     Clyde* clyde;
     TileMap* level;
+    NavMesh* navMesh;
     std::vector<Object*> objects;
     int peletsCollected;
     int munch;
     bool returnMainMenu;
+    bool started;
     Sound startMusic;
+    GhostState ghostState;
+    float lastStateChangeTime;
+    float timer;
 
     Camera2D camera;
     DebugMode debug;

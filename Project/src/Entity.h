@@ -17,6 +17,9 @@ public:
 	void SetPos(const Point& p);
 	void Update();
 	AABB GetHitbox() const;
+	Point GetCenterPosition();
+	int CalculateDistance(Point p);
+	int CalculateDistanceWithCenter(Point p);
 
 	//Draw representation model
 	void Draw() const;

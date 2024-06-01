@@ -12,6 +12,7 @@ Scene::Scene()
 	inky = nullptr;
 	clyde = nullptr;
 	level = nullptr;
+	navMesh = nullptr;
 
 	camera.target = { 0, 0 };				//Center of the screen
 	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	//Offset from the target (center of the screen)
@@ -92,7 +93,7 @@ AppStatus Scene::Init()
 	}
 
 	//Create player
-	player = new Player({ 0, 0 }, PlayerState::IDLE, PlayerLook::RIGHT);
+	player = new Player({ 0, 0 }, PlayerState::IDLE, Directions::RIGHT);
 	if (player == nullptr)
 	{
 		LOG("Failed to allocate memory for Player");
@@ -106,7 +107,7 @@ AppStatus Scene::Init()
 	}
 
 	//Create blinky
-	blinky = new Blinky({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	blinky = new Blinky({ 0, 0 }, GhostState::SCATTLE, Directions::RIGHT);
 	if (blinky == nullptr)
 	{
 		LOG("Failed to allocate memory for blinky");
@@ -119,7 +120,7 @@ AppStatus Scene::Init()
 		return AppStatus::ERROR;
 	}
 	//Create pinky
-	pinky = new Pinky({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	pinky = new Pinky({ 0, 0 }, GhostState::SCATTLE, Directions::RIGHT);
 	if (pinky == nullptr)
 	{
 		LOG("Failed to allocate memory for pinky");
@@ -131,7 +132,7 @@ AppStatus Scene::Init()
 		LOG("Failed to initialise pinky");
 		return AppStatus::ERROR;
 	}
-	inky = new Inky({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	inky = new Inky({ 0, 0 }, GhostState::SCATTLE, Directions::RIGHT);
 	if (inky == nullptr)
 	{
 		LOG("Failed to allocate memory for inky");
@@ -143,7 +144,7 @@ AppStatus Scene::Init()
 		LOG("Failed to initialise inky");
 		return AppStatus::ERROR;
 	}
-	clyde = new Clyde({ 0, 0 }, GhostState::WALKING, GhostLook::RIGHT);
+	clyde = new Clyde({ 0, 0 }, GhostState::SCATTLE, Directions::RIGHT);
 	if (clyde == nullptr)
 	{
 		LOG("Failed to allocate memory for clyde");
@@ -169,6 +170,14 @@ AppStatus Scene::Init()
 		LOG("Failed to initialise Level");
 		return AppStatus::ERROR;
 	}
+	//Create navMesh
+	navMesh = new NavMesh();
+	if (navMesh == nullptr)
+	{
+		LOG("Failed to allocate memory for Navigation Mesh");
+		return AppStatus::ERROR;
+	}
+
 	//Load level
 	if (LoadLevel(1) != AppStatus::OK)
 	{
@@ -179,10 +188,22 @@ AppStatus Scene::Init()
 	//Assign the tile map reference to the player to check collisions while navigating
 	player->SetTileMap(level);
 	blinky->SetTileMap(level);
+	blinky->SetNavMesh(navMesh);
+	blinky->SetPlayer(player);
 	pinky->SetTileMap(level);
+	pinky->SetNavMesh(navMesh);
+	pinky->SetPlayer(player);
 	inky->SetTileMap(level);
+	inky->SetNavMesh(navMesh);
+	inky->SetPlayer(player);
+	inky->SetBlinky(blinky);
+	clyde->SetNavMesh(navMesh);
 	clyde->SetTileMap(level);
+	clyde->SetPlayer(player);
 
+	started = false;
+	ghostState = GhostState::SCATTLE;
+	lastStateChangeTime = 0;
 	startMusic = *data.GetSound(ResourceType::MUSIC_START);
 	PlaySound(startMusic);
 	return AppStatus::OK;
@@ -194,13 +215,14 @@ AppStatus Scene::LoadLevel(int stage)
 	Tile tile;
 	Point pos;
 	int* map = nullptr;
+	int* navMeshMap = nullptr;
 	Object* obj;
 
 	ClearLevel();
 
-	size = LEVEL_WIDTH * LEVEL_HEIGHT;
 	if (stage == 1)
 	{
+		size = LEVEL_WIDTH * LEVEL_HEIGHT;
 		map = new int[size] {
 			0,	0,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	2,	2,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	31,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	101,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	102,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
@@ -208,7 +230,7 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	7,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	5,	0,	0,	0,	0,	4,	0,	51,	0,	0,	5,	0,	0,	0,	0,	0,	0,	4,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	5,	0,	0,	0,	0,	0,	0,	4,	0,	51,	0,	0,	5,	0,	0,	0,	0,	4,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,	52,	0,	0,	5,	0,	0,	0,	0,	4,	0,	51,	0,	0,	5,	0,	0,	0,	0,	0,	0,	4,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	5,	0,	0,	0,	0,	0,	0,	4,	0,	51,	0,	0,	5,	0,	0,	0,	0,	4,	0,	52,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	5,	0,	0,	0,	0,	4,	0,	0,	0,	0,	5,	0,	0,	0,	0,	0,	0,	4,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	5,	0,	0,	0,	0,	0,	0,	4,	0,	0,	0,	0,	5,	0,	0,	0,	0,	4,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	9,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	8,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
@@ -221,7 +243,7 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	32,	24,	24,	24,	24,	24,	24,	24,	24,	24,	31,	0,	0,	0,	0,	5,	0,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	0,	4,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24,	32,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	32,	24,	24,	24,	24,	24,	24,	24,	24,	24,	31,	0,	0,	0,	0,	5,	0,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	0,	4,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24, 33,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	0,	3,	3,	3,	3,	3,	8,	0,	0,	0,	0,	9,	8,	0,	0,	0,	0,	9,	3,	3,	3,	3,	3,	0,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
@@ -248,7 +270,7 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	7,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	9,	3,	3,	3,	0,	4,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	5,	0,	3,	3,	3,	8,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	100,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	0,	0,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,	52,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	0,	0,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	52,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	5,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	4,	0,	0,	0,	0,	0,	0,
@@ -265,6 +287,42 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	32, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 33,	0,	0,	0,	0,	0,	0
 		};
+	
+		size = (LEVEL_WIDTH / 2) * (LEVEL_HEIGHT / 2);
+		navMeshMap = new int[size] {
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	0,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,
+			1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,
+		};
+		
 		player->InitScore();
 	}
 	else
@@ -323,7 +381,15 @@ AppStatus Scene::LoadLevel(int stage)
 				Point pHitBox;
 				pHitBox.x = SMALL_OBJECT_SIZE / 4;
 				pHitBox.y = SMALL_OBJECT_SIZE / 4;
-				obj = new Object(pos, pHitBox, ObjectType::SMALL_PELET, SMALL_OBJECT_SIZE, SMALL_OBJECT_PHYSICAL_SIZE/2 );
+				obj = new Object(pos, pHitBox, ObjectType::SMALL_PELET, SMALL_OBJECT_SIZE, SMALL_OBJECT_SIZE / 2 );
+				objects.push_back(obj);
+				map[i] = 0;
+			}
+			else if (tile == Tile::LARGE_PELET)
+			{
+				pos.x = x * TILE_SIZE;
+				pos.y = y * TILE_SIZE;
+				obj = new Object(pos, ObjectType::LARGE_PELET, MEDIUM_OBJECT_SIZE);
 				objects.push_back(obj);
 				map[i] = 0;
 			}
@@ -350,25 +416,30 @@ AppStatus Scene::LoadLevel(int stage)
 	}
 	//Tile map
 	level->Load(map, LEVEL_WIDTH, LEVEL_HEIGHT);
+	
+	//Nav mesh map
+	navMesh->Load(navMeshMap, LEVEL_WIDTH / 2, LEVEL_HEIGHT / 2);
 
 	delete map;
+	delete navMeshMap;
 
 	return AppStatus::OK;
 }
 void Scene::Update()
 {
+	started = !IsSoundPlaying(startMusic);
+
 	//Switch between the different debug modes: off, on (sprites & hitboxes), on (hitboxes) 
 	if (IsKeyPressed(KEY_F1))
 	{
 		debug = (DebugMode)(((int)debug + 1) % (int)DebugMode::SIZE);
 	}
-	//Debug levels instantly
-	//if (IsKeyPressed(KEY_ONE))		LoadLevel(1);
-	//else if (IsKeyPressed(KEY_TWO))	LoadLevel(2);
-	if (!IsSoundPlaying(startMusic))
+
+	if (started)
 	{
 		level->Update();
 		player->Update();
+		UpdateGhostState();
 		blinky->Update();
 		pinky->Update();
 		inky->Update();
@@ -381,7 +452,19 @@ void Scene::Render()
 	BeginMode2D(camera);
 
 	level->Render();
-	if (debug == DebugMode::OFF || debug == DebugMode::SPRITES_AND_HITBOXES)
+
+	if (debug == DebugMode::SPRITES_AND_NAVMESH)
+	{
+		navMesh->DrawDebug(RED);
+	}
+	if (debug == DebugMode::SPRITES_AND_NAVMESH_ROUTES || debug == DebugMode::SPRITES_AND_NAVMESH)
+	{
+		blinky->DrawDebugNavmesh(RED);
+		pinky->DrawDebugNavmesh(PINK);
+		inky->DrawDebugNavmesh(SKYBLUE);
+		clyde->DrawDebugNavmesh(ORANGE);
+	}
+	if (debug == DebugMode::OFF || debug == DebugMode::SPRITES_AND_HITBOXES || debug == DebugMode::SPRITES_AND_NAVMESH || debug == DebugMode::SPRITES_AND_NAVMESH_ROUTES || debug == DebugMode::SPRITES_AND_NAVMESH)
 	{
 		RenderObjects();
 		player->Draw();
@@ -399,6 +482,7 @@ void Scene::Render()
 		pinky->DrawDebug(RED);
 		inky->DrawDebug(RED);
 		clyde->DrawDebug(RED);
+		DrawPixel(0, 0, WHITE);
 	}
 
 	EndMode2D();
@@ -414,6 +498,29 @@ void Scene::Release()
 	inky->Release();
 	clyde->Release();
 	ClearLevel();
+}
+void Scene::UpdateGhostState()
+{
+	if (lastStateChangeTime == 0) lastStateChangeTime = static_cast<float>(GetTime());
+	float currentTime = static_cast<float>(GetTime());
+	float elapsedTime = currentTime - lastStateChangeTime;
+
+	if (ghostState == GhostState::SCATTLE && elapsedTime >= TIME_IN_SCATTER) {
+		ghostState = GhostState::CHASE;
+		blinky->ChangeCommonState(ghostState);
+		pinky->ChangeCommonState(ghostState);
+		inky->ChangeCommonState(ghostState);
+		clyde->ChangeCommonState(ghostState);
+		lastStateChangeTime = currentTime;
+	}
+	else if (ghostState == GhostState::CHASE && elapsedTime >= TIME_IN_CHASE) {
+		ghostState = GhostState::SCATTLE;
+		blinky->ChangeCommonState(ghostState);
+		pinky->ChangeCommonState(ghostState);
+		inky->ChangeCommonState(ghostState);
+		clyde->ChangeCommonState(ghostState);
+		lastStateChangeTime = currentTime;
+	}
 }
 void Scene::CheckCollisions()
 {
@@ -458,7 +565,12 @@ void Scene::CheckCollisions()
 			}
 			else if (type == ObjectType::LARGE_PELET)
 			{
-
+				blinky->ChangeState(GhostState::FRIGHTENED);
+				pinky->ChangeState(GhostState::FRIGHTENED);
+				inky->ChangeState(GhostState::FRIGHTENED);
+				clyde->ChangeState(GhostState::FRIGHTENED);
+				delete* it;
+				it = objects.erase(it);
 			}
 			else if (type == ObjectType::RIGHT_TELEPORTER)
 			{
@@ -518,6 +630,10 @@ void Scene::CheckCollisions()
 		{
 			if (!player_box.TestAABB(obj_box)) it++;
 		}
+		else if (type == ObjectType::LARGE_PELET)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
 		else if (type == ObjectType::RIGHT_TELEPORTER)
 		{
 			it++;
@@ -528,10 +644,38 @@ void Scene::CheckCollisions()
 		}
 	}
 
-	if (player_box.TestAABB(blinky_box)) returnMainMenu = true;
-	if (player_box.TestAABB(pinky_box)) returnMainMenu = true;
-	if (player_box.TestAABB(inky_box)) returnMainMenu = true;
-	if (player_box.TestAABB(clyde_box)) returnMainMenu = true;
+	if (player_box.TestAABB(blinky_box))
+	{
+		if (blinky->GetState() == GhostState::FRIGHTENED) //COMIDO
+		{
+			blinky->ChangeState(GhostState::EATEN); 
+		}
+		else if (blinky->GetState() == GhostState::SCATTLE || blinky->GetState() == GhostState::CHASE) returnMainMenu = true;
+	}
+	if (player_box.TestAABB(pinky_box)) 
+	{
+		if (pinky->GetState() == GhostState::FRIGHTENED) //COMIDO
+		{
+			pinky->ChangeState(GhostState::EATEN); 
+		}
+		else if (pinky->GetState() == GhostState::SCATTLE || pinky->GetState() == GhostState::CHASE) returnMainMenu = true;
+	}
+	if (player_box.TestAABB(inky_box)) 
+	{
+		if (inky->GetState() == GhostState::FRIGHTENED) //COMIDO
+		{
+			inky->ChangeState(GhostState::EATEN); 
+		}
+		else if (inky->GetState() == GhostState::SCATTLE || inky->GetState() == GhostState::CHASE) returnMainMenu = true;
+	}
+	if (player_box.TestAABB(clyde_box)) 
+	{
+		if (clyde->GetState() == GhostState::FRIGHTENED) //COMIDO
+		{
+			clyde->ChangeState(GhostState::EATEN); 
+		}
+		else if (clyde->GetState() == GhostState::SCATTLE || clyde->GetState() == GhostState::CHASE) returnMainMenu = true;
+	}
 
 }
 bool Scene::GetReturnMainMenu()
