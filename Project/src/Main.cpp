@@ -4,7 +4,6 @@
 #include "MemoryLeaks.h"
 #include "Globals.h"
 #include "LogMessages.h"
-#include <vld.h>
 
 int main()
 {
