@@ -20,6 +20,7 @@ AppStatus ResourceManager::LoadTexture(ResourceType id, const std::string& file_
     {
         //Error loading texture
         LOG("Failed to load texture ", file_path);
+        UnloadTexture(texture);
         return AppStatus::ERROR;
     }
 
@@ -44,16 +45,17 @@ void ResourceManager::ReleaseTexture(ResourceType id)
 
 AppStatus ResourceManager::LoadSound(ResourceType id, const std::string& file_path)
 {
-    //Load the sound
+    // Load the sound
     Sound sound = ::LoadSound(file_path.c_str());
-    if (sound.frameCount = 0)
+    if (sound.frameCount == 0)
     {
-        //Error loading sound
+        // Error loading sound
         LOG("Failed to load sound ", file_path);
+        UnloadSound(sound); // Liberar la memoria asignada para el sonido
         return AppStatus::ERROR;
     }
 
-    //Insert the loaded sound into the map with the specified key
+    // Insertar el sonido cargado en el mapa con la clave especificada
     sounds[id] = sound;
     return AppStatus::OK;
 }
@@ -74,10 +76,11 @@ AppStatus ResourceManager::LoadMusic(ResourceType id, const std::string& file_pa
 {
     //Load the music
     Music music = ::LoadMusicStream(file_path.c_str());
-    if (music.frameCount = 0)
+    if (music.frameCount == 0)
     {
         //Error loading music
         LOG("Failed to load music ", file_path);
+        UnloadMusicStream(music);
         return AppStatus::ERROR;
     }
 

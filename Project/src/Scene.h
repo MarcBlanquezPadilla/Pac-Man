@@ -36,6 +36,7 @@ private:
     void UpdateGhostState();
     void PlaySounds();
     void StopSoundsInException(const Sound* s);
+    void StopAllSounds();
     void ShowPuntuation(Point position, Puntuations puntuation);
     void EatGhostPuntuation(Point position);
     void EatFruitPuntuation(ObjectType type, Point position);

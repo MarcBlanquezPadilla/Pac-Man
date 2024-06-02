@@ -140,12 +140,12 @@ void Game::Render()
         DrawTexture(*img_route, (WINDOW_WIDTH - img_route->width) / 2, WINDOW_HEIGHT / 2 - img_route->height / 2, WHITE);
         if (eating)
         {
-            Rectangle sourceRect = { 0, (4+animPhrame) * n, 5 * n, n };
+            Rectangle sourceRect = { 0, (float)(4+animPhrame) * n,(float)5 * n,(float)n };
             DrawTextureRec(*img_animations, sourceRect, { (float)position, WINDOW_HEIGHT / 2 - sourceRect.height / 2 }, WHITE);
         }
         else
         {
-            Rectangle sourceRect = { 0, (animPhrame) * n, 5 * n, n };
+            Rectangle sourceRect = { 0, (float)(animPhrame) * n, (float)5 * n,(float)n };
             DrawTextureRec(*img_animations, sourceRect, { (float)position, WINDOW_HEIGHT / 2 - sourceRect.height / 2 }, WHITE);
         }
         DrawTexture(*img_above, (WINDOW_WIDTH - img_above->width) / 2, WINDOW_HEIGHT / 2 - img_above->height / 2, WHITE);
@@ -191,6 +191,7 @@ void Game::GoNextLevel(int startPuntuation, int startLives, int level)
 }
 void Game::Cleanup()
 {
+    CloseAudioDevice();
     UnloadResources();
     CloseWindow();
 }
@@ -223,11 +224,9 @@ AppStatus Game::LoadResources()
 }
 void Game::UnloadResources()
 {
+
     ResourceManager& data = ResourceManager::Instance();
-    data.ReleaseTexture(ResourceType::IMG_MENU);
-    data.ReleaseTexture(ResourceType::IMG_MENU_ABOVE);
-    data.ReleaseTexture(ResourceType::IMG_MENU_ANIMATIONS);
-    data.ReleaseTexture(ResourceType::IMG_MENU_TITLE);
+    data.Release();
 
     UnloadRenderTexture(target);
 }

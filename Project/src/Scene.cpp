@@ -674,19 +674,19 @@ void Scene::PlaySounds()
 		{
 			currentSound = siren_1;
 		}
-		else if (percent < 50)
+		else if (percent < 60)
 		{
 			currentSound = siren_2;
 		}
-		else if (percent < 65)
+		else if (percent < 75)
 		{
 			currentSound = siren_3;
 		}
-		else if (percent < 80)
+		else if (percent < 90)
 		{
 			currentSound = siren_4;
 		}
-		else if (percent < 90)
+		else if (percent <= 100)
 		{
 			currentSound = siren_5;
 		}
@@ -711,6 +711,22 @@ void Scene::StopSoundsInException(const Sound* sound)
 	if (siren_3 != sound && IsSoundPlaying(*siren_3)) StopSound(*siren_3);
 	if (siren_4 != sound && IsSoundPlaying(*siren_4)) StopSound(*siren_4);
 	if (siren_5 != sound && IsSoundPlaying(*siren_5)) StopSound(*siren_5);
+}
+void Scene::StopAllSounds()
+{
+	StopSound(*startMusic);
+	StopSound(*retreating);
+	StopSound(*power_pellet);
+	StopSound(*siren_1);
+	StopSound(*siren_2);
+	StopSound(*siren_3);
+	StopSound(*siren_4);
+	StopSound(*siren_5);
+	StopSound(*munch_1);
+	StopSound(*munch_2);
+	StopSound(*eat_ghost);
+	StopSound(*eat_fruit);
+	StopSound(*dead);
 }
 void Scene::Render()
 {
@@ -748,13 +764,13 @@ void Scene::Render()
 		if (died && player->GetLives() == 0)
 		{
 			int n = LETTERS_SIZE;
-			Rectangle  sourceRect = { 16 * n, 7 * n, 9 * n, 1 * n };
+			Rectangle  sourceRect = { 16 * n, 7 * n,(float)9 * n,(float)1 * n };
 			DrawTextureRec(*lettersTexture, sourceRect, { LEVEL_WIDTH * 8 / 2 - sourceRect.width/2, LEVEL_HEIGHT * 8 / 2 + sourceRect.height * 1.5f} , WHITE);
 		}
 		if (IsSoundPlaying(*startMusic) || waitTime!= 0)
 		{
 			int n = LETTERS_SIZE;
-			Rectangle  sourceRect = { 0 * n, 8 * n, 6 * n, 1 * n };
+			Rectangle  sourceRect = { 0 * n, 8 * n, (float)6 * n,(float)1 * n };
 			DrawTextureRec(*lettersTexture, sourceRect, { LEVEL_WIDTH * 8 / 2 - sourceRect.width / 2, LEVEL_HEIGHT * 8 / 2 + sourceRect.height * 1.5f }, WHITE);
 		}
 	}
@@ -776,6 +792,7 @@ void Scene::Render()
 }
 void Scene::Release()
 {
+	StopAllSounds();
 	startMusic = nullptr; 
 	retreating = nullptr;
 	power_pellet = nullptr;
@@ -803,7 +820,8 @@ void Scene::Release()
 	data.ReleaseSound(ResourceType::SOUND_EAT_GHOST);
 	data.ReleaseSound(ResourceType::SOUND_DEAD);
 	data.ReleaseTexture(ResourceType::IMG_LETTERS);
-	data.ReleaseTexture(ResourceType::SOUND_EAT_FRUIT);
+	data.ReleaseSound(ResourceType::SOUND_EAT_FRUIT);
+
 	ClearLevel();
 }
 void Scene::UpdateGhostState()

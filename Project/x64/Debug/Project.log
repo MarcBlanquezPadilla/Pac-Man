@@ -1,10 +1,2 @@
-﻿  Blinky.cpp
-  Clyde.cpp
-  Ghost.cpp
-  Inky.cpp
-  Pinky.cpp
-  Generando código...
-  Buscando bibliotecas
-      Buscando C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib\raylib.lib:
-  Búsqueda de bibliotecas finalizada
+﻿  Game.cpp
   Project.vcxproj -> C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\x64\Debug\Project.exe

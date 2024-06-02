@@ -14,11 +14,15 @@ NavMesh::NavMesh()
 }
 NavMesh::~NavMesh()
 {
-	if (map != nullptr)
-	{
-		delete[] map;
-		map = nullptr;
-	}
+    if (map != nullptr)
+    {
+        for (int i = 0; i < width; ++i)
+        {
+            delete[] map[i];
+        }
+        delete[] map;
+        map = nullptr;
+    }
 }
 
 AppStatus NavMesh::Load(int data[], int w, int h)
@@ -29,17 +33,17 @@ AppStatus NavMesh::Load(int data[], int w, int h)
 
     if (map != nullptr) delete[] map;
 
-    map = new Path * [width]; // Cambiado height por width
-    for (int i = 0; i < width; ++i) // Cambiado height por width
+    map = new Path * [width]; 
+    for (int i = 0; i < width; ++i) 
     {
-        map[i] = new Path[height]; // Cambiado height por width
+        map[i] = new Path[height]; 
     }
 
-    for (int j = 0; j < height; ++j) // Cambiado height por width
+    for (int j = 0; j < height; ++j) 
     {
         for (int i = 0; i < width; ++i)
         {
-            Path path = static_cast<Path>(data[j * width + i]); // Intercambiado j y i
+            Path path = static_cast<Path>(data[j * width + i]); 
             if (data[j * width + i] == 0) path = Path::WALKABLE;
             else path = Path::NOTWALKABLE;
 
@@ -58,22 +62,22 @@ AppStatus NavMesh::Load(int data[], int w, int h)
 
 std::vector<Movement> NavMesh::GetBestPath(int startPosX, int startPosY, int endPosX, int endPosY, Directions d)
 {
-    Point startIndex = GetPathIndex(startPosX, startPosY); // Convertimos de píxeles a la dimensión del Nav Mesh
-    Point endIndex = GetPathIndex(endPosX, endPosY); // Convertimos de píxeles a la dimensión del Nav Mesh
+    Point startIndex = GetPathIndex(startPosX, startPosY); 
+    Point endIndex = GetPathIndex(endPosX, endPosY); 
 
     if (startIndex.x < 0 || startIndex.x >= width || startIndex.y < 0 || startIndex.y >= height ||
         endIndex.x < 0 || endIndex.x >= width || endIndex.y < 0 || endIndex.y >= height) {
         LOG("Error: Start or end position out of bounds.");
-        return {}; // Return an empty vector to indicate an error
+        return {}; 
     }
 
     if (map[static_cast<int>(startIndex.x)][static_cast<int>(startIndex.y)] != Path::WALKABLE) {
         LOG("Error: Start position not walkable.");
-        return {}; // Return an empty vector to indicate an error
+        return {}; 
     }
     if (map[static_cast<int>(endIndex.x)][static_cast<int>(endIndex.y)] != Path::WALKABLE) {
         LOG("Error: End position not walkable.");
-        return {}; // Return an empty vector to indicate an error
+        return {}; 
     }
 
     std::vector<std::vector<bool>> explored(width, std::vector<bool>(height, false));
