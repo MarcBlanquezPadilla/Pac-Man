@@ -8,7 +8,7 @@ Pac-Man features a yellow, circular character named Pac-Man who runs through a m
 The goal is to clear each maze of balls and avoid the chasing ghosts.
 
 ## Gameplay
- A video from the gameplay [HERE]
+ A video from the gameplay [HERE](https://youtu.be/uHKnEBKBubw)
  
 ## Controls
 ~~~~~~~~~~~~~~~
@@ -19,7 +19,10 @@ Keyboard Player 1 controls:
 - RIGHT : D key
 ~~~~~~~~~~~~~~~
 ## Team Members
+- Marc Blanquez Padilla
+
+- Albert Frederic Bailen
 
 ### Our Wiki Page [HERE](https://github.com/MarcBlanquezPadilla/Pac-Man/wiki)
-### Download the last version of the game [HERE]
+### Download the last version of the game [HERE](https://github.com/MarcBlanquezPadilla/Pac-Man/releases/tag/v1.0)
 ### Check our github repository [HERE](https://github.com/MarcBlanquezPadilla/Pac-Man)
