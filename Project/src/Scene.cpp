@@ -1229,7 +1229,10 @@ void Scene::RenderObjectsDebug(const Color& col) const
 void Scene::RenderGUI() const
 {
 	//Temporal approach
-	DrawText(TextFormat("SCORE : %d      LIVES : %d", player->GetScore(), player->GetLives()), 10, 10, 20, LIGHTGRAY);
+	DrawText(TextFormat("SCORE : %d", player->GetScore()), 10, 10, 20, LIGHTGRAY);
+	const char* text = TextFormat("LIVES : %d", player->GetLives());
+	int fontSize = 20;
+	DrawText(TextFormat(text), WINDOW_WIDTH - MeasureText(text, fontSize) - 10, 10, fontSize, WHITE);
 }
 void Scene::GoNextLevel()
 {

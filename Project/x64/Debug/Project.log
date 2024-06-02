@@ -1,2 +1,10 @@
-﻿  Game.cpp
+﻿  Scene.cpp
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(767,33): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(767,33): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(767,40): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(767,40): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(773,32): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(773,32): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(773,39): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\src\Scene.cpp(773,39): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
   Project.vcxproj -> C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\x64\Debug\Project.exe
