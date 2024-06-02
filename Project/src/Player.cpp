@@ -39,51 +39,68 @@ AppStatus Player::Initialise()
 	sprite->SetNumberAnimations((int)PlayerAnim::NUM_ANIMATIONS);
 
 	sprite->SetAnimationDelay((int)PlayerAnim::BITE_RIGHT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_RIGHT, { (float)0 * n, 0, n, n });
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_RIGHT, { (float)1 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_RIGHT, { (float)2 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_RIGHT, { (float)1 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_RIGHT, { (float)0 * n, 0, n, n });
+	sprite->AddKeyFrame((int)PlayerAnim::BITE_RIGHT, { (float)1 * n, 0, n, n });
 	sprite->SetAnimationDelay((int)PlayerAnim::BITE_LEFT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_LEFT, { (float)3 * n, 0, n, n });
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_LEFT, { (float)4 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_LEFT, { (float)5 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_LEFT, { (float)4 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_LEFT, { (float)3 * n, 0, n, n });
+	sprite->AddKeyFrame((int)PlayerAnim::BITE_LEFT, { (float)4 * n, 0, n, n });
 	sprite->SetAnimationDelay((int)PlayerAnim::BITE_UP, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_UP, { (float)6 * n, 0, n, n });
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_UP, { (float)7 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_UP, { (float)8 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_UP, { (float)7 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_UP, { (float)6 * n, 0, n, n });
+	sprite->AddKeyFrame((int)PlayerAnim::BITE_UP, { (float)7 * n, 0, n, n });
 	sprite->SetAnimationDelay((int)PlayerAnim::BITE_DOWN, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_DOWN, { (float)9 * n, 0, n, n });
-	sprite->AddKeyFrame((int)PlayerAnim::BITE_DOWN, { (float)10 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_DOWN, { (float)11 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_DOWN, { (float)10 * n, 0, n, n });
 	sprite->AddKeyFrame((int)PlayerAnim::BITE_DOWN, { (float)9 * n, 0, n, n });
+	sprite->AddKeyFrame((int)PlayerAnim::BITE_DOWN, { (float)10 * n, 0, n, n });
 
-	sprite->SetAnimationDelay((int)PlayerAnim::DIE, ANIM_DELAY);
+	sprite->SetAnimationDelay((int)PlayerAnim::DIE, ANIM_DELAY*2);
 	for (i = 0; i < 11; ++i)
-		sprite->AddKeyFrame((int)PlayerAnim::DIE, { (float)i * n, 1, n, n });
+		sprite->AddKeyFrame((int)PlayerAnim::DIE, { (float)i * n, 1 * n, n, n });
 	
-	state = PlayerState::WALKING;
-	direction = Directions::RIGHT;
-	SetAnimation((int)PlayerAnim::BITE_RIGHT);
+	Reload();
 
 	return AppStatus::OK;
 }
-void Player::InitScore()
+void Player::Reload()
 {
-	score = 0;
+	state = PlayerState::WALKING;
+	direction = Directions::RIGHT;
+	SetAnimation((int)PlayerAnim::BITE_RIGHT); 
+	died = false;
+}
+void Player::InitScore(int n)
+{
+	score = n;
 }
 void Player::IncrScore(int n)
 {
 	score += n;
 }
+void Player::IncrLives(int n)
+{
+	lives += n;
+}
 int Player::GetScore()
 {
 	return score;
+}
+int Player::GetLives()
+{
+	return lives;
+}
+void Player::InitLives(int n)
+{
+	lives = n;
+}
+void Player::DecrLives(int n)
+{
+	lives -= n;
 }
 void Player::SetTileMap(TileMap* tilemap)
 {
@@ -130,10 +147,10 @@ bool Player::JustOneKeyIsDown()
 		return true;
 	else return false;
 }
-void Player::SetAnimation(int id)
+void Player::SetAnimation(int id, bool b)
 {
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
-	sprite->SetAnimation(id);
+	sprite->SetAnimation(id, b);
 }
 PlayerAnim Player::GetAnimation()
 {
@@ -177,18 +194,27 @@ void Player::StartWalkingDown()
 
 void Player::Update()
 {
-	ChangeMove();
-	if (state == PlayerState::WALKING)
+	if (!died)
 	{
-		Move();
-	}
-	else if (state == PlayerState::IDLE)
-	{
-		SetCurrentDelayToAnimation(1000); //PAUSAR ANIMACIO
+		ChangeMove();
+		if (state == PlayerState::WALKING)
+		{
+			Move();
+		}
+		else if (state == PlayerState::IDLE)
+		{
+			SetCurrentDelayToAnimation(1000); //PAUSAR ANIMACIO
+		}
 	}
 
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
 	sprite->Update();
+}
+
+void Player::Die()
+{
+	died = true;
+	SetAnimation((int)PlayerAnim::DIE, false);
 }
 
 void Player::Move()

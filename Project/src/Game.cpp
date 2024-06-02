@@ -60,9 +60,9 @@ AppStatus Game::Initialise(float scale)
 
     return AppStatus::OK;
 }
-AppStatus Game::BeginPlay()
+AppStatus Game::BeginPlay(int startPuntuation = 0, int startLives = 3, int level = 0)
 {
-    scene = new Scene();
+    scene = new Scene(this, startPuntuation, startLives, level);
     if (scene == nullptr)
     {
         LOG("Failed to allocate memory for Scene");
@@ -93,10 +93,13 @@ AppStatus Game::Update()
         break;
 
     case GameState::PLAYING:
-        if (IsKeyPressed(KEY_ESCAPE) || scene->GetReturnMainMenu() == true) //PROVISIONAL RETURN MAIN MENU
+        if (IsKeyPressed(KEY_ESCAPE)) //PROVISIONAL RETURN MAIN MENU
         {
-            FinishPlay();
-            state = GameState::MAIN_MENU;
+            ReturnToMainMenu();
+        }
+        else if (IsKeyPressed(KEY_F2)) //PROVISIONAL RETURN MAIN MENU
+        {
+            scene->GoNextLevel();
         }
         else
         {
@@ -130,6 +133,17 @@ void Game::Render()
     DrawTexturePro(target.texture, src, dst, { 0, 0 }, 0.0f, WHITE);
     EndDrawing();
  }
+void Game::ReturnToMainMenu()
+{
+    state = GameState::MAIN_MENU;
+    FinishPlay();
+}
+void Game::GoNextLevel(int startPuntuation, int startLives, int level)
+{
+    FinishPlay();
+    level++;
+    BeginPlay(startPuntuation, startLives, level);
+}
 void Game::Cleanup()
 {
     UnloadResources();

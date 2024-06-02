@@ -3,9 +3,9 @@
 #include "Globals.h"
 #include "LogMessages.h"
 
-Scene::Scene()
+Scene::Scene(Game* g, int sP, int sL, int l) : startPuntuation(sP), startLives(sL), lvl(l)
 {
-	returnMainMenu = false; //PROVISIONAL
+	game = g;
 	player = nullptr;
 	blinky = nullptr;
 	pinky = nullptr;
@@ -16,15 +16,23 @@ Scene::Scene()
 	puntuation1 = nullptr;
 	puntuation2 = nullptr;
 
-	camera.target = { 0, 0 };				//Center of the screen
-	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	//Offset from the target (center of the screen)
-	camera.rotation = 0.0f;					//No rotation
-	camera.zoom = 1.0f;						//Default zoom
+	returnMainMenu = false;
+	goNextLevel = false;
+	died = false;
+	won = false;
+
+	camera.target = { 0, 0 };				
+	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	
+	camera.rotation = 0.0f;					
+	camera.zoom = 1.0f;						
 
 	totalPelets = 0;
 	peletsCollected = 0;
 	munch = 1;
 	ghostEaten = 0;
+	pacmanSpawnPos = { 0,0 };
+	startWaitTime = 0;
+	waitTime = 0;
 
 	debug = DebugMode::OFF;
 }
@@ -98,6 +106,11 @@ AppStatus Scene::Init()
 		return AppStatus::ERROR;
 	}
 
+	if (data.LoadTexture(ResourceType::IMG_LETTERS, "resources/sprites/LettersX2.png") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+
 	if (data.LoadSound(ResourceType::SOUND_MUNCH_1, "resources/sounds/FX/munch_1.wav") != AppStatus::OK)
 	{
 		return AppStatus::ERROR;
@@ -153,6 +166,10 @@ AppStatus Scene::Init()
 		return AppStatus::ERROR;
 	}
 
+	if (data.LoadSound(ResourceType::SOUND_DEAD, "resources/sounds/FX/death.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
 	startMusic = data.GetSound(ResourceType::MUSIC_START);
 	power_pellet = data.GetSound(ResourceType::SOUND_POWER_PELLET);
 	retreating = data.GetSound(ResourceType::SOUND_RETREATING);
@@ -164,6 +181,8 @@ AppStatus Scene::Init()
 	munch_1 = data.GetSound(ResourceType:: SOUND_MUNCH_1);
 	munch_2 = data.GetSound(ResourceType:: SOUND_MUNCH_2);
 	eat_ghost = data.GetSound(ResourceType::SOUND_EAT_GHOST);
+	dead = data.GetSound(ResourceType::SOUND_DEAD);
+	lettersTexture = data.GetTexture(ResourceType::IMG_LETTERS);
 
 	//Create player
 	player = new Player({ 0, 0 }, PlayerState::IDLE, Directions::RIGHT);
@@ -285,6 +304,8 @@ AppStatus Scene::Init()
 
 	//Assign the tile map reference to the player to check collisions while navigating
 	player->SetTileMap(level);
+	player->InitScore(startPuntuation);
+	player->InitLives(startLives);
 	blinky->SetTileMap(level);
 	blinky->SetNavMesh(navMesh);
 	blinky->SetPlayer(player);
@@ -302,7 +323,8 @@ AppStatus Scene::Init()
 	started = false;
 	ghostState = GhostState::SCATTLE;
 	lastStateChangeTime = 0;
-	PlaySound(*startMusic);
+	if (lvl == 0) PlaySound(*startMusic);
+	else waitTime = TIME_TO_START;
 	return AppStatus::OK;
 }
 AppStatus Scene::LoadLevel(int stage)
@@ -420,7 +442,8 @@ AppStatus Scene::LoadLevel(int stage)
 			1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,
 		};
 		
-		player->InitScore();
+		player->InitScore(startPuntuation);
+		player->InitLives(startLives);
 	}
 	else
 	{
@@ -440,36 +463,36 @@ AppStatus Scene::LoadLevel(int stage)
 			{
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
-				player->SetPos(pos);
-				map[i] = 0;
+				pacmanSpawnPos = pos;
+				player->SetPos(pacmanSpawnPos);
 			}
 			else if (tile == Tile::BLINKY)
 			{
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
-				blinky->SetPos(pos);
-				map[i] = 0;
+				blinkySpawnPos = pos;
+				blinky->SetPos(blinkySpawnPos);
 			}
 			else if (tile == Tile::PINKY)
 			{
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
-				pinky->SetPos(pos);
-				map[i] = 0;
+				pinkySpawnPos = pos;
+				pinky->SetPos(pinkySpawnPos);
 			}
 			else if (tile == Tile::INKY)
 			{
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
-				inky->SetPos(pos);
-				map[i] = 0;
+				inkySpawnPos = pos;
+				inky->SetPos(inkySpawnPos);
 			}
 			else if (tile == Tile::CLYDE)
 			{
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
-				clyde->SetPos(pos);
-				map[i] = 0;
+				clydeSpawnPos = pos;
+				clyde->SetPos(clydeSpawnPos);
 			}
 			else if (tile == Tile::SMALL_PELET)
 			{
@@ -525,7 +548,11 @@ AppStatus Scene::LoadLevel(int stage)
 }
 void Scene::Update()
 {
-	started = !IsSoundPlaying(*startMusic);
+	if (!IsSoundPlaying(*startMusic) && !started)
+	{
+		started = true;
+		startWaitTime = static_cast<float>(GetTime());
+	}
 
 	//Switch between the different debug modes: off, on (sprites & hitboxes), on (hitboxes) 
 	if (IsKeyPressed(KEY_F1))
@@ -533,20 +560,97 @@ void Scene::Update()
 		debug = (DebugMode)(((int)debug + 1) % (int)DebugMode::SIZE);
 	}
 
-	if (started)
+	float currentTime = static_cast<float>(GetTime());
+	float elapsedTime = currentTime - startWaitTime;
+
+	if (elapsedTime > waitTime)
 	{
-		level->Update();
-		player->Update();
-		UpdateGhostState();
-		blinky->Update();
-		pinky->Update();
-		inky->Update();
-		clyde->Update();
-		puntuation1->Update();
-		puntuation2->Update();
-		CheckCollisions();
-		PlaySounds();
+		waitTime = 0;
+		if (started && !died && !won)
+		{
+			level->Update();
+			player->Update();
+			UpdateGhostState();
+			blinky->Update();
+			pinky->Update();
+			inky->Update();
+			clyde->Update();
+			puntuation1->Update();
+			puntuation2->Update();
+			CheckCollisions();
+			PlaySounds();
+		}
+		else if (won)
+		{
+			Won();
+		}
+		else if (died)
+		{
+			if (IsSoundPlaying(*dead)) player->Update();
+			else
+			{
+				if (player->GetLives() > 0) ReloadScene();
+				else returnMainMenu = true;
+			}
+		}
+
+		CheckEndLevel();
 	}
+}
+void Scene::PlayerDie()
+{
+	died = true;
+	player->Die();
+	player->DecrLives(1);
+	PlaySound(*dead);
+}
+void Scene::Win()
+{
+	won = true;
+	startWinTimer = static_cast<float>(GetTime());
+	player->SetAnimation((int)PlayerAnim::BITE_DOWN);
+}
+void Scene::Won()
+{
+	float currentTime = static_cast<float>(GetTime());
+	float elapsedTime = currentTime - startWinTimer;
+
+	if (elapsedTime < TIME_WIN)
+	{
+		level->ChangeMap(static_cast<int>(elapsedTime * 2) % 2 == 0); //TRUE TO WHITE FALSE TO BLUE
+	}
+	else GoNextLevel();
+
+}
+void Scene::ReloadScene()
+{
+	started = false;
+	died = false;
+	player->SetPos(pacmanSpawnPos);	
+	player->Reload();
+	waitTime = TIME_TO_START;
+
+	ghostState = GhostState::SCATTLE;
+	float percent = static_cast<float>(peletsCollected) / static_cast<float>(totalPelets) * 100;
+	if (percent >= BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(GhostState::CHASE);
+
+	blinky->SetPos(blinkySpawnPos);
+	if (percent < BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(ghostState);
+	blinky->Reload();
+
+	pinky->SetPos(pinkySpawnPos);
+	pinky->ChangeCommonState(ghostState);
+	pinky->Reload();
+
+	inky->SetPos(inkySpawnPos);
+	inky->ChangeCommonState(ghostState);
+	inky->Reload();
+
+	clyde->SetPos(clydeSpawnPos);
+	clyde->ChangeCommonState(ghostState);
+	clyde->Reload();
+
+	lastStateChangeTime = 0;
 }
 void Scene::PlaySounds()
 {
@@ -627,14 +731,30 @@ void Scene::Render()
 	{
 		RenderObjects();
 		player->Draw();
-		blinky->Draw();
-		pinky->Draw();
-		inky->Draw();
-		clyde->Draw();
-		if (puntuation1->ReturnHaveToRender()) 
-			puntuation1->Draw();
-		if (puntuation2->ReturnHaveToRender()) 
-			puntuation2->Draw();
+		
+		if (!died && !won)
+		{
+			blinky->Draw();
+			pinky->Draw();
+			inky->Draw();
+			clyde->Draw();
+			if (puntuation1->ReturnHaveToRender())
+				puntuation1->Draw();
+			if (puntuation2->ReturnHaveToRender())
+				puntuation2->Draw();
+		}
+		if (died && player->GetLives() == 0)
+		{
+			int n = LETTERS_SIZE;
+			Rectangle  sourceRect = { 16 * n, 7 * n, 9 * n, 1 * n };
+			DrawTextureRec(*lettersTexture, sourceRect, { LEVEL_WIDTH * 8 / 2 - sourceRect.width/2, LEVEL_HEIGHT * 8 / 2 + sourceRect.height * 1.5f} , WHITE);
+		}
+		if (IsSoundPlaying(*startMusic) || waitTime!= 0)
+		{
+			int n = LETTERS_SIZE;
+			Rectangle  sourceRect = { 0 * n, 8 * n, 6 * n, 1 * n };
+			DrawTextureRec(*lettersTexture, sourceRect, { LEVEL_WIDTH * 8 / 2 - sourceRect.width / 2, LEVEL_HEIGHT * 8 / 2 + sourceRect.height * 1.5f }, WHITE);
+		}
 	}
 	level->RenderEmptys();
 	if (debug == DebugMode::SPRITES_AND_HITBOXES || debug == DebugMode::ONLY_HITBOXES)
@@ -654,12 +774,18 @@ void Scene::Render()
 }
 void Scene::Release()
 {
-	level->Release();
-	player->Release();
-	blinky->Release();
-	pinky->Release();
-	inky->Release();
-	clyde->Release();
+	startMusic = nullptr; 
+	retreating = nullptr;
+	power_pellet = nullptr;
+	siren_1 = nullptr;
+	siren_2 = nullptr;
+	siren_3 = nullptr;
+	siren_4 = nullptr;
+	siren_5 = nullptr;
+	munch_1 = nullptr;
+	munch_2 = nullptr;
+	eat_ghost = nullptr;
+	dead = nullptr;
 	ResourceManager& data = ResourceManager::Instance();
 	data.ReleaseSound(ResourceType::SOUND_SIREN_1);
 	data.ReleaseSound(ResourceType::SOUND_SIREN_2);
@@ -672,6 +798,8 @@ void Scene::Release()
 	data.ReleaseSound(ResourceType::SOUND_MUNCH_1);
 	data.ReleaseSound(ResourceType::MUSIC_START);
 	data.ReleaseSound(ResourceType::SOUND_EAT_GHOST);
+	data.ReleaseSound(ResourceType::SOUND_DEAD);
+	data.ReleaseTexture(ResourceType::IMG_LETTERS);
 	ClearLevel();
 }
 void Scene::UpdateGhostState()
@@ -681,10 +809,13 @@ void Scene::UpdateGhostState()
 	float elapsedTime = currentTime - lastStateChangeTime;
 
 	float percent = static_cast<float>(peletsCollected) / static_cast<float>(totalPelets) * 100;
+	float dificultyPercent = static_cast<float>(lvl) / 10;
+	if (dificultyPercent > 1) dificultyPercent = 1;
 	
 	if (percent >= BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(GhostState::CHASE);
+	
 
-	if (ghostState == GhostState::SCATTLE && elapsedTime >= TIME_IN_SCATTER) {
+	if (ghostState == GhostState::SCATTLE && elapsedTime >= TIME_IN_SCATTER - TIME_IN_SCATTER * dificultyPercent) {
 		ghostState = GhostState::CHASE;
 		if (percent < BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(ghostState);
 		pinky->ChangeCommonState(ghostState);
@@ -737,14 +868,14 @@ void Scene::CheckCollisions()
 				delete* it;
 				it = objects.erase(it);
 				peletsCollected++;
-				if (peletsCollected == totalPelets)	returnMainMenu = true;
+				if (peletsCollected == totalPelets)	Win();
 			}
 			else if (type == ObjectType::LARGE_PELET)
 			{
-				if (blinky->GetState()!=GhostState::EATEN)blinky->ChangeState(GhostState::FRIGHTENED);
-				if (pinky->GetState() != GhostState::EATEN)pinky->ChangeState(GhostState::FRIGHTENED);
-				if (inky->GetState() != GhostState::EATEN)inky->ChangeState(GhostState::FRIGHTENED);
-				if (clyde->GetState() != GhostState::EATEN)clyde->ChangeState(GhostState::FRIGHTENED);
+				if (blinky->GetState() != GhostState::EATEN) blinky->ChangeState(GhostState::FRIGHTENED);
+				if (pinky->GetState() != GhostState::EATEN) pinky->ChangeState(GhostState::FRIGHTENED);
+				if (inky->GetState() != GhostState::EATEN) inky->ChangeState(GhostState::FRIGHTENED);
+				if (clyde->GetState() != GhostState::EATEN) clyde->ChangeState(GhostState::FRIGHTENED);
 				delete* it;
 				it = objects.erase(it);
 				ghostEaten = 0;
@@ -829,7 +960,7 @@ void Scene::CheckCollisions()
 			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
 			EatGhostPuntuation(blinky->GetCenterPosition());
 		}
-		else if (blinky->GetState() == GhostState::SCATTLE || blinky->GetState() == GhostState::CHASE) returnMainMenu = true;
+		else if (blinky->GetState() == GhostState::SCATTLE || blinky->GetState() == GhostState::CHASE) PlayerDie();
 	}
 	if (player_box.TestAABB(pinky_box)) 
 	{
@@ -839,7 +970,7 @@ void Scene::CheckCollisions()
 			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
 			EatGhostPuntuation(pinky->GetCenterPosition());
 		}
-		else if (pinky->GetState() == GhostState::SCATTLE || pinky->GetState() == GhostState::CHASE) returnMainMenu = true;
+		else if (pinky->GetState() == GhostState::SCATTLE || pinky->GetState() == GhostState::CHASE) PlayerDie();
 	}
 	if (player_box.TestAABB(inky_box)) 
 	{
@@ -849,7 +980,7 @@ void Scene::CheckCollisions()
 			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
 			EatGhostPuntuation(inky->GetCenterPosition());
 		}
-		else if (inky->GetState() == GhostState::SCATTLE || inky->GetState() == GhostState::CHASE) returnMainMenu = true;
+		else if (inky->GetState() == GhostState::SCATTLE || inky->GetState() == GhostState::CHASE) PlayerDie();
 	}
 	if (player_box.TestAABB(clyde_box)) 
 	{
@@ -859,13 +990,14 @@ void Scene::CheckCollisions()
 			if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_ghost);
 			EatGhostPuntuation(clyde->GetCenterPosition());
 		}
-		else if (clyde->GetState() == GhostState::SCATTLE || clyde->GetState() == GhostState::CHASE) returnMainMenu = true;
+		else if (clyde->GetState() == GhostState::SCATTLE || clyde->GetState() == GhostState::CHASE) PlayerDie();
 	}
 
 }
-bool Scene::GetReturnMainMenu()
+void Scene::CheckEndLevel()
 {
-	return returnMainMenu;
+	if (returnMainMenu) game->ReturnToMainMenu();
+	else if (goNextLevel) game->GoNextLevel(player->GetScore(), player->GetLives(), lvl);
 }
 void Scene::ShowPuntuation(Point position, Puntuations puntuation)
 {
@@ -923,5 +1055,9 @@ void Scene::RenderObjectsDebug(const Color& col) const
 void Scene::RenderGUI() const
 {
 	//Temporal approach
-	DrawText(TextFormat("SCORE : %d", player->GetScore()), 10, 10, 8, LIGHTGRAY);
+	DrawText(TextFormat("SCORE : %d      LIVES : %d", player->GetScore(), player->GetLives()), 10, 10, 20, LIGHTGRAY);
+}
+void Scene::GoNextLevel()
+{
+	goNextLevel = true;
 }

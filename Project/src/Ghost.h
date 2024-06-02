@@ -40,6 +40,7 @@ public:
 	void SetPlayer(Player* player);
 	void ChangeCommonState(GhostState state);
 	void ChangeState(GhostState state);
+	void Reload();
 
 	virtual void Update();
 	virtual void UpdateStates();

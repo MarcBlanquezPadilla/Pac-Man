@@ -9,6 +9,7 @@ struct Animation
 {
     int delay;
     std::vector<Rectangle> frames;
+    bool loop = true;
 };
 
 class Sprite : public RenderComponent
@@ -20,8 +21,8 @@ public:
     void SetNumberAnimations(int num);
     void SetAnimationDelay(int id, int delay);
     void AddKeyFrame(int id, const Rectangle& rect);
-    void SetAnimation(int id);
-    void SetCurrentDelay(int delay);
+    void SetAnimation(int id, bool loop = true);
+    void SetCurrentDelay(int delay); 
     int GetAnimation();
 
     void SetManualMode();

@@ -53,7 +53,8 @@ public:
 	bool TestCollisionWallLeft(const AABB& box) const;
 	bool TestCollisionWallRight(const AABB& box) const;
 	bool TestCollisionWallUp(const AABB& box) const;
-	bool TestCollisionWallDown(const AABB& box) const;
+	bool TestCollisionWallDown(const AABB& box) const; 
+	void ChangeMap(bool white);
 
 private:
 	void InitTileDictionary();

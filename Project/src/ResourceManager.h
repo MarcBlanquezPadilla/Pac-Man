@@ -8,6 +8,7 @@ enum class ResourceType {
     IMG_PLAYER,
     IMG_GHOSTS,
     IMG_MAP,
+    IMG_MAP_WHITE,
     IMG_ITEMS,
     IMG_PUNTUATIONS,
     IMG_LETTERS,
@@ -22,7 +23,8 @@ enum class ResourceType {
     SOUND_SIREN_3,
     SOUND_SIREN_4,
     SOUND_SIREN_5,
-    SOUND_EAT_GHOST
+    SOUND_EAT_GHOST,
+    SOUND_DEAD
 };
 
 class ResourceManager {

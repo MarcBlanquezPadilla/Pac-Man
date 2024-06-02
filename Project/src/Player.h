@@ -31,14 +31,21 @@ public:
 	AppStatus Initialise();
 	void SetTileMap(TileMap* tilemap);
 
-	void InitScore();
-	void IncrScore(int n);
+	void InitScore(int n);
+	void InitLives(int n);
+	void IncrScore(int n); 
+	void IncrLives(int n); 
+	void DecrLives(int n);
 	int GetScore();
+	int GetLives();
+	void Die();
 
 	void Update();
 	void DrawDebug(const Color& col);
 	void Release();
+	void Reload();
 	Directions GetDirection();
+	void SetAnimation(int id, bool loop = true);
 
 private:
 	bool IsLookingRight() const;
@@ -57,7 +64,6 @@ private:
 	void Stop();
 
 	//Animation management
-	void SetAnimation(int id);
 	PlayerAnim GetAnimation();
 	void SetCurrentDelayToAnimation(int i);
 
@@ -67,5 +73,7 @@ private:
 	TileMap* map;
 
 	int score;
+	int lives;
+	bool died;
 };
 

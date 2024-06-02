@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include "Game.h"
 #include "Player.h"
 #include "TileMap.h"
 #include "Object.h"
@@ -13,21 +14,24 @@
 
 enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SPRITES_AND_NAVMESH_ROUTES, SPRITES_AND_NAVMESH, SIZE };
 
+class Game;
+
 class Scene
 {
 public:
-    Scene();
+    Scene(Game* game, int startPuntuation, int startLives, int level);
     ~Scene();
 
     AppStatus Init();
     void Update();
     void Render();
     void Release();
-    bool GetReturnMainMenu();
+    void GoNextLevel();
 
 private:
     AppStatus LoadLevel(int stage);
 
+    void CheckEndLevel();
     void CheckCollisions();
     void UpdateGhostState();
     void PlaySounds();
@@ -37,6 +41,11 @@ private:
     void ClearLevel();
     void RenderObjects() const;
     void RenderObjectsDebug(const Color& col) const;
+    void PlayerDie();
+    void Win();
+    void Won();
+    void ReloadScene();
+
 
     void RenderGUI() const;
 
@@ -48,20 +57,35 @@ private:
     Clyde* clyde;
     TileMap* level;
     NavMesh* navMesh;
+    Game* game;
     Puntuation* puntuation1;
     Puntuation* puntuation2;
     std::vector<Object*> objects;
 
     //VARIABLE
+    int startPuntuation;
+    int startLives;
+    int lvl;
     int peletsCollected;
     int totalPelets;
     int munch;
-    bool returnMainMenu;
     bool started;
     GhostState ghostState;
-    float lastStateChangeTime;
+    float lastStateChangeTime; 
+    float startWaitTime;
+    float waitTime;
+    float startWinTimer;
     float timer;
     int ghostEaten;
+    bool returnMainMenu;
+    bool goNextLevel;
+    bool died;
+    bool won;
+    Point pacmanSpawnPos;
+    Point blinkySpawnPos; //PROVISIONAL
+    Point pinkySpawnPos; //PROVISIONAL
+    Point inkySpawnPos; //PROVISIONAL
+    Point clydeSpawnPos; //PROVISIONAL
 
     //SOUNDS
     const Sound* startMusic;
@@ -75,6 +99,10 @@ private:
     const Sound* munch_1;
     const Sound* munch_2;
     const Sound* eat_ghost;
+    const Sound* dead;
+
+    //TEXTURES
+    const Texture* lettersTexture;
 
     Camera2D camera;
     DebugMode debug;

@@ -31,13 +31,14 @@ void Sprite::AddKeyFrame(int id, const Rectangle& rect)
         animations[id].frames.push_back(rect);
     }
 }
-void Sprite::SetAnimation(int id)
+void Sprite::SetAnimation(int id, bool l)
 {
     if (id >= 0 && id < animations.size())
     {
         current_anim = id;
         current_frame = 0;
         current_delay = animations[current_anim].delay;
+        animations[id].loop = l;
     }
 }
 int Sprite::GetAnimation()
@@ -58,17 +59,29 @@ void Sprite::SetAutomaticMode()
 }
 void Sprite::Update()
 {
-    //Both animation modes (automatic and manual) are carry out with animation delay
+    // Ambos modos de animación (automático y manual) se realizan con retraso de animación
     if (current_delay > 0)
     {
         current_delay--;
         if (current_delay == 0)
         {
-            //Only automatic animation mode advances next frame
+            // Solo el modo de animación automático avanza al siguiente fotograma
             if (mode == AnimMode::AUTOMATIC)
             {
                 current_frame++;
-                current_frame %= animations[current_anim].frames.size();
+
+                // Verificar si loop es false y si ya estamos en el último fotograma
+                if (!animations[current_anim].loop && current_frame >= animations[current_anim].frames.size())
+                {
+                    // No avanzar al siguiente fotograma y mantener el fotograma actual
+                    current_frame = animations[current_anim].frames.size() - 1;
+                }
+                else
+                {
+                    // Si loop es true o aún no hemos alcanzado el último fotograma, continuar como de costumbre
+                    current_frame %= animations[current_anim].frames.size();
+                }
+
                 current_delay = animations[current_anim].delay;
             }
         }

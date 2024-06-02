@@ -160,12 +160,13 @@ void Ghost::UpdateStates()
 			{
 				float partOfSecond = fmod(elapsedTime, 1.0f);
 				if (partOfSecond < 0.5f) {
-					if (GetAnimation() != GhostAnim::FRIGHTENED_WHITE)SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED_WHITE));
+					if (GetAnimation() != GhostAnim::FRIGHTENED_WHITE) SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED_WHITE));
 				}
 				else {
-					if (GetAnimation() != GhostAnim::FRIGHTENED)SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED));
+					if (GetAnimation() != GhostAnim::FRIGHTENED) SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED));
 				}
 			}
+			else if (GetAnimation() == GhostAnim::FRIGHTENED_WHITE) SetAnimation(static_cast<int>(GhostAnim::FRIGHTENED));
 		}
 		break;
 	}
@@ -246,7 +247,11 @@ void Ghost::Move()
 	}
 
 }
-
+void Ghost::Reload()
+{
+	route.clear();
+	ChangeState(GhostState::SCATTLE);
+}
 void Ghost::GoPath(Point point)
 {
 	while (true)
@@ -254,26 +259,21 @@ void Ghost::GoPath(Point point)
 		bool canFollowPath = false;
 		std::vector<Directions> availableDirections = GetDirectionsCanMove();
 
-		// Check if Pinky is just above a navigation point and there is no current route
 		if (navMesh->CheckItsJustAbove(pos, GHOST_FRAME_SIZE) && (route.size() == 0 || ChangeRoute(point)))
 		{
-			// Calculate the best path to the scatter target
 			route = navMesh->GetBestPath(GetCenterPosition().x, GetCenterPosition().y, point.x, point.y, direction); //Calcula la mejor ruta
 		}
 
-		// Follow the current path if one exists
 		if (!route.empty())
 		{
 			canFollowPath = true;
 			Point nextPos = navMesh->GetPixelToGo(route.front().movedIndex, GHOST_FRAME_SIZE);
 
-			// If Pinky reaches the next position, remove the completed movement from the route
 			if (pos.x == nextPos.x && pos.y == nextPos.y)
 			{
 				route.erase(route.begin());
 			}
 
-			// Continue following the route if there are more movements
 			if (!route.empty())
 			{
 				Point currentPos = navMesh->GetPixelToGo(route.front().startIndex, GHOST_FRAME_SIZE);
@@ -284,13 +284,11 @@ void Ghost::GoPath(Point point)
 			}
 			else
 			{
-				// Route is empty, restart ChangeMove
 				canFollowPath = false;
-				continue;  // Restart the function by re-entering the while loop
+				continue; 
 			}
 		}
 
-		// If not following a path, choose a new direction to move
 		if (!canFollowPath)
 		{
 			route.clear();
@@ -299,7 +297,7 @@ void Ghost::GoPath(Point point)
 				if (nextDir != direction && nextDir != OppositeDirection(direction)) // Avoid going backwards
 				{
 					StartWalking(nextDir);
-					break; // Change direction only once
+					break;
 				}
 			}
 		}

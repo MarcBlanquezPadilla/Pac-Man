@@ -79,6 +79,10 @@ AppStatus TileMap::Initialise()
 	{
 		return AppStatus::ERROR;
 	}
+	if (data.LoadTexture(ResourceType::IMG_MAP_WHITE, "resources/sprites/MapWhiteX2.png") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
 	img_tiles = data.GetTexture(ResourceType::IMG_MAP);
 
 	return AppStatus::OK;
@@ -237,4 +241,11 @@ void TileMap::Release()
 	data.ReleaseTexture(ResourceType::IMG_MAP);
 
 	dict_tiles.clear();
+}
+
+void TileMap::ChangeMap(bool white)
+{
+	ResourceManager& data = ResourceManager::Instance();
+	if (white) img_tiles = data.GetTexture(ResourceType::IMG_MAP_WHITE);
+	else img_tiles = data.GetTexture(ResourceType::IMG_MAP);
 }

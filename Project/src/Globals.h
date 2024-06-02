@@ -16,11 +16,12 @@ enum class Directions { NONE = -1, RIGHT, LEFT, UP, DOWN };
 
 //Game constants
 #define TILE_SIZE			8
+#define LETTERS_SIZE		16
 #define LEVEL_WIDTH			68
 #define LEVEL_HEIGHT		62
 #define MARGIN_GUI_X		(WINDOW_WIDTH/2)-(LEVEL_WIDTH*TILE_SIZE)/2
 #define MARGIN_GUI_Y		(WINDOW_HEIGHT/2)-(LEVEL_HEIGHT*TILE_SIZE)/2 + 80 //(EXTRA DISPLAÇMENT)
-#define TIME_IN_SCATTER		7
+#define TIME_IN_SCATTER		10
 #define TIME_IN_CHASE		10
 #define TIME_IN_FRIGHTENED	8
 #define TIME_TO_BLINK		5
@@ -30,6 +31,8 @@ enum class Directions { NONE = -1, RIGHT, LEFT, UP, DOWN };
 #define LEFT_SPAWN_POS_X	264
 #define PUNTUATION_SIZE		48
 #define BLINKY_PERCENT_TO_PERMANENTLY_CHASE		80
+#define TIME_TO_START		2
+#define TIME_WIN			3
 
 //Teleports
 #define RIGHT_TP_POS_X		496
