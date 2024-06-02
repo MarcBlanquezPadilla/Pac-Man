@@ -28,7 +28,15 @@ private:
 
     GameState state;
     Scene *scene;
-    const Texture2D* img_menu;
+    const Texture2D* img_route;
+    const Texture2D* img_above;
+    const Texture2D* img_animations;
+    const Texture2D* img_title;
+    bool eating = false;
+    int animPhrame = 0;
+    int position = WINDOW_WIDTH;
+    int frameCounter = 0;
+    int direction = -1;
 
     //To work with original game units and then scale the result
     RenderTexture2D target;

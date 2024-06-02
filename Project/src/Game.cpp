@@ -10,7 +10,8 @@ Game::Game()
 {
     state = GameState::MAIN_MENU;
     scene = nullptr;
-    img_menu = nullptr;
+    img_route = nullptr;
+    img_above = nullptr;
 
     target = {};
     src = {};
@@ -44,7 +45,7 @@ AppStatus Game::Initialise(float scale)
     }
     SetTextureFilter(target.texture, TEXTURE_FILTER_POINT);
     src = { 0, 0, WINDOW_WIDTH, -WINDOW_HEIGHT };
-    dst = { 0, 0, w, h };
+    dst = { 0, 0, w, h };	
 
     //Load textures
     if (LoadResources() != AppStatus::OK)
@@ -90,6 +91,22 @@ AppStatus Game::Update()
             if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
             state = GameState::PLAYING;
         }
+
+        frameCounter++;
+        if (frameCounter % 4 == 0) // Incrementa animPhrame cada 4 frames
+        {
+            animPhrame++;
+            if (animPhrame >= 4) animPhrame = 0;
+            
+        }
+
+        position += PLAYER_SPEED * direction;
+        if (position >= WINDOW_HEIGHT || position <= 0- MENU_ANIM_SIZE*5) // Cambia de dirección al alcanzar maxHeight o 0
+        {
+            direction *= -1;
+            eating = !eating;
+        }
+
         break;
 
     case GameState::PLAYING:
@@ -118,12 +135,40 @@ void Game::Render()
     switch (state)
     {
     case GameState::MAIN_MENU:
-        DrawTexture(*img_menu, 0, 0, WHITE);
+    {
+        int n = MENU_ANIM_SIZE;
+        DrawTexture(*img_route, (WINDOW_WIDTH - img_route->width) / 2, WINDOW_HEIGHT / 2 - img_route->height / 2, WHITE);
+        if (eating)
+        {
+            Rectangle sourceRect = { 0, (4+animPhrame) * n, 5 * n, n };
+            DrawTextureRec(*img_animations, sourceRect, { (float)position, WINDOW_HEIGHT / 2 - sourceRect.height / 2 }, WHITE);
+        }
+        else
+        {
+            Rectangle sourceRect = { 0, (animPhrame) * n, 5 * n, n };
+            DrawTextureRec(*img_animations, sourceRect, { (float)position, WINDOW_HEIGHT / 2 - sourceRect.height / 2 }, WHITE);
+        }
+        DrawTexture(*img_above, (WINDOW_WIDTH - img_above->width) / 2, WINDOW_HEIGHT / 2 - img_above->height / 2, WHITE);
+        DrawTexture(*img_title, (WINDOW_WIDTH - img_title->width) / 2, WINDOW_HEIGHT / 4 - img_title->height / 2, WHITE);
+        const char* text = "PRESS SPACE TO START";
+        int fontSize = 20;
+        DrawText(TextFormat(text), WINDOW_WIDTH /2 - MeasureText(text, fontSize)/2, WINDOW_HEIGHT/16 * 11, fontSize, YELLOW);
+        text = "PRESS ESC TO EXIT";
+        fontSize = 20;
+        DrawText(TextFormat(text), WINDOW_WIDTH / 2 - MeasureText(text, fontSize) / 2, WINDOW_HEIGHT / 16 * 13, fontSize, RED);
+        text = "MADE BY ALBERT & MARC";
+        fontSize = 10;
+        DrawText(TextFormat(text), WINDOW_WIDTH / 2 - MeasureText(text, fontSize) / 2, WINDOW_HEIGHT / 16 * 16, fontSize, WHITE);
+
         break;
+    }
 
     case GameState::PLAYING:
+    {
         scene->Render();
         break;
+    }
+
     }
 
     EndTextureMode();
@@ -153,11 +198,26 @@ AppStatus Game::LoadResources()
 {
     ResourceManager& data = ResourceManager::Instance();
 
-    if (data.LoadTexture(ResourceType::IMG_MENU, "resources/sprites/MainMenu.png") != AppStatus::OK)
+    if (data.LoadTexture(ResourceType::IMG_MENU, "resources/sprites/menu_pacman.png") != AppStatus::OK)
     {
         return AppStatus::ERROR;
     }
-    img_menu = data.GetTexture(ResourceType::IMG_MENU);
+    img_route = data.GetTexture(ResourceType::IMG_MENU);
+    if (data.LoadTexture(ResourceType::IMG_MENU_ABOVE, "resources/sprites/menu_pacman_above.png") != AppStatus::OK)
+    {
+        return AppStatus::ERROR;
+    }
+    img_above = data.GetTexture(ResourceType::IMG_MENU_ABOVE);
+    if (data.LoadTexture(ResourceType::IMG_MENU_ANIMATIONS, "resources/sprites/menu_animations.png") != AppStatus::OK)
+    {
+        return AppStatus::ERROR;
+    }
+    img_animations = data.GetTexture(ResourceType::IMG_MENU_ANIMATIONS);
+    if (data.LoadTexture(ResourceType::IMG_MENU_TITLE, "resources/sprites/menu_titile.png") != AppStatus::OK)
+    {
+        return AppStatus::ERROR;
+    }
+    img_title = data.GetTexture(ResourceType::IMG_MENU_TITLE);
 
     return AppStatus::OK;
 }
@@ -165,6 +225,9 @@ void Game::UnloadResources()
 {
     ResourceManager& data = ResourceManager::Instance();
     data.ReleaseTexture(ResourceType::IMG_MENU);
+    data.ReleaseTexture(ResourceType::IMG_MENU_ABOVE);
+    data.ReleaseTexture(ResourceType::IMG_MENU_ANIMATIONS);
+    data.ReleaseTexture(ResourceType::IMG_MENU_TITLE);
 
     UnloadRenderTexture(target);
 }
