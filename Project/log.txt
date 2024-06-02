@@ -1,100 +1,137 @@
-Project executed on 01-06-2024 at 14:26:18.
+Project executed on 01-06-2024 at 23:12:03.
 Main.cpp(16): Application start
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (39, 41)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (39, 41)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (39, 41)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (39, 41)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 39)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 39)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 39)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 39)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 37)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 37)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 37)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 37)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 36)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 35)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (38, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (37, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 34)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 33)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 32)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (35, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (36, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (37, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (37, 31)
-NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (37, 31)
-NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (37, 31)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (29, 37)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (29, 37)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (31, 36)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (31, 36)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (33, 35)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (33, 35)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (34, 35)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (34, 35)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (34, 35)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (34, 35)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (31, 40)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (31, 40)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (32, 42)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (32, 42)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-12, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-12, 44)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-12, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-12, 44)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-12, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-12, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-14, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-14, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-15, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-15, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-16, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-16, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-16, 39)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-16, 39)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-16, 37)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-16, 37)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-16, 36)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-16, 36)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-7, 40)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-7, 40)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-5, 41)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-5, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-2, 41)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-2, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (0, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (2, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (3, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (3, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (4, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-3, 36)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-3, 36)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-3, 34)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-3, 34)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (0, 41)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (0, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (0, 46)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (0, 48)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-5, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-5, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-8, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-8, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-10, 44)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-10, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-11, 38)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-11, 38)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-11, 36)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-11, 36)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (-12, 34)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (-12, 34)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(75): Error: End position not walkable.
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (34, 11)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (34, 11)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 10)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (36, 10)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 9)
+NavMesh.cpp(197): Error: Index out of bounds on x. Tile map dimensions: 34x31. Given index: (38, 9)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (28, -1)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (28, -1)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 49)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 50)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 49)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 48)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 47)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 46)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 45)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 44)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 43)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (5, 32)
+NavMesh.cpp(66): Error: Start or end position out of bounds.
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 31)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 31)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 32)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 32)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 33)
+NavMesh.cpp(201): Error: Index out of bounds on y. Tile map dimensions: 34x31. Given index: (9, 33)
 Main.cpp(38): Application finish
 Main.cpp(41): Bye :)

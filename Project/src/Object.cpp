@@ -16,7 +16,9 @@ Object::Object(const Point& p, ObjectType t, int objectSize) : Entity(p, objectS
 	case ObjectType::LEFT_TELEPORTER: rc = { 35 * n, 0, (float)objectSize, (float)objectSize }; break;
 	case ObjectType::RIGHT_TELEPORTER: rc = { 35 * n, 0, (float)objectSize, (float)objectSize }; break;
 
-	default: LOG("Internal error: object creation of invalid type");
+	case ObjectType::FRUIT: rc = { 40 * n, 0 , (float)objectSize, (float)objectSize }; break;
+
+	default: LOG("Internal error: object creation  of invalid type");
 	}
 
 	ResourceManager& data = ResourceManager::Instance();
@@ -34,6 +36,8 @@ Object::Object(const Point& p, ObjectType t, int sizeX, int sizeY, int hitBoxSiz
 	case ObjectType::LARGE_PELET: rc = { 32 * n, 0, (float)sizeX, (float)sizeY }; break;
 	case ObjectType::LEFT_TELEPORTER: rc = { 35 * n, 0, (float)sizeX, (float)sizeY }; break;
 	case ObjectType::RIGHT_TELEPORTER: rc = { 35 * n, 0, (float)sizeX, (float)sizeY }; break;
+
+	case ObjectType::FRUIT: rc = { 36 * n, 0, (float)sizeX, (float)sizeY }; break;
 
 	default: LOG("Internal error: object creation of invalid type");
 	}
@@ -53,6 +57,8 @@ Object::Object(const Point& pos, const Point& hitBoxPosition, ObjectType t, int 
 	case ObjectType::LARGE_PELET: rc = { 32 * n, 0, (float)objectSize, (float)objectSize }; break;
 	case ObjectType::LEFT_TELEPORTER: rc = { 35 * n, 0, (float)objectSize, (float)objectSize }; break;
 	case ObjectType::RIGHT_TELEPORTER: rc = { 35 * n, 0, (float)objectSize, (float)objectSize }; break;
+
+	case ObjectType::FRUIT: rc = { 36 * n, 0, (float)objectSize, (float)objectSize }; break;
 
 	default: LOG("Internal error: object creation of invalid type");
 	}
@@ -77,6 +83,16 @@ int Object::Points() const
 	else
 	{
 		LOG("Internal error: object type invalid when giving points");
+		return 0;
+	}
+}
+
+int Object::Fruit() const
+{
+	if (type == ObjectType::FRUIT) return POINTS_FRUIT;
+	else
+	{
+		LOG("Internal error: object type invalid when giving fruits");
 		return 0;
 	}
 }

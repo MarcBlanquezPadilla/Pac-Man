@@ -20,7 +20,7 @@ enum class Tile {
 	DOOR_CORNER_LEFT, DOOR_CORNER_RIGHT, 
 
 	// 50 <= id < 100: special tiles
-	DOOR = 50, SMALL_PELET, LARGE_PELET, TP_LEFT, TP_RIGHT,
+	DOOR = 50, SMALL_PELET, LARGE_PELET, TP_LEFT, TP_RIGHT, FRUIT,
 
 	// id >= 100: entities' initial locations
 	PLAYER = 100, BLINKY, PINKY, INKY, CLYDE,

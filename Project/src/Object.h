@@ -9,8 +9,10 @@
 #define LARGE_OBJECT_PHYSICAL_SIZE 32
 
 #define POINTS_SMALL_PELET	10
+#define POINTS_FRUIT 1000
 
-enum class ObjectType { SMALL_PELET, LARGE_PELET, RIGHT_TELEPORTER, LEFT_TELEPORTER };
+
+enum class ObjectType { SMALL_PELET, LARGE_PELET, RIGHT_TELEPORTER, LEFT_TELEPORTER, FRUIT };
 
 class Object : public Entity
 {
@@ -23,7 +25,7 @@ public:
 	ObjectType GetObjectType();
 	void DrawDebug(const Color& col) const;
 	int Points() const;
-
+	int Fruit() const;
 private:
 	ObjectType type;
 };

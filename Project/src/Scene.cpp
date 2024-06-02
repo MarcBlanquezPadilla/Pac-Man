@@ -281,8 +281,8 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	103,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	104,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	103,0,	0,	0,	0,	0,	0,	0,	0,	0,	55,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	104,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	0,	0,	0,	0,	0,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	32, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 33,	0,	0,	0,	0,	0,	0
@@ -382,6 +382,14 @@ AppStatus Scene::LoadLevel(int stage)
 				pHitBox.x = SMALL_OBJECT_SIZE / 4;
 				pHitBox.y = SMALL_OBJECT_SIZE / 4;
 				obj = new Object(pos, pHitBox, ObjectType::SMALL_PELET, SMALL_OBJECT_SIZE, SMALL_OBJECT_SIZE / 2 );
+				objects.push_back(obj);
+				map[i] = 0;
+			}
+			else if (tile == Tile::FRUIT)
+			{
+				pos.x = x * TILE_SIZE - LARGE_OBJECT_SIZE / 2;
+				pos.y = y * TILE_SIZE;
+				obj = new Object(pos, ObjectType::FRUIT, LARGE_OBJECT_SIZE);
 				objects.push_back(obj);
 				map[i] = 0;
 			}
@@ -563,6 +571,32 @@ void Scene::CheckCollisions()
 				peletsCollected++;
 				if (peletsCollected == PELETS_TO_WIN)	returnMainMenu = true;
 			}
+
+			if (type == ObjectType::FRUIT)
+			{
+				ResourceManager& data = ResourceManager::Instance();
+				const Sound* munch_1 = data.GetSound(ResourceType::SOUND_MUNCH_1);
+				const Sound* munch_2 = data.GetSound(ResourceType::SOUND_MUNCH_2);
+				if (munch_1 != nullptr) {
+					if (!IsSoundPlaying(*munch_1) && !IsSoundPlaying(*munch_2))
+						if (munch == 1)
+						{
+							PlaySound(*munch_1);
+							munch = 2;
+						}
+						else if (munch == 2)
+						{
+							PlaySound(*munch_2);
+							munch = 1;
+						}
+				}
+				player->IncrScore((*it)->Fruit());
+				delete* it; 
+				it = objects.erase(it);
+				peletsCollected++;
+				if (peletsCollected == PELETS_TO_WIN)	returnMainMenu = true;
+			}
+
 			else if (type == ObjectType::LARGE_PELET)
 			{
 				blinky->ChangeState(GhostState::FRIGHTENED);
@@ -627,6 +661,10 @@ void Scene::CheckCollisions()
 		}
 		
 		if (type == ObjectType::SMALL_PELET)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT)
 		{
 			if (!player_box.TestAABB(obj_box)) it++;
 		}
