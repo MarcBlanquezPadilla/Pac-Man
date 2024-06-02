@@ -18,6 +18,7 @@ public:
 	void Update();
 	AABB GetHitbox() const;
 	Point GetCenterPosition();
+	Point GetPosition();
 	int CalculateDistance(Point p);
 	int CalculateDistanceWithCenter(Point p);
 

@@ -19,7 +19,8 @@ Scene::Scene(Game* g, int sP, int sL, int l) : startPuntuation(sP), startLives(s
 	returnMainMenu = false;
 	goNextLevel = false;
 	died = false;
-	won = false;
+	won = false; 
+	fruitSpawned = false;
 
 	camera.target = { 0, 0 };				
 	camera.offset = { MARGIN_GUI_X, MARGIN_GUI_Y };	
@@ -170,6 +171,11 @@ AppStatus Scene::Init()
 	{
 		return AppStatus::ERROR;
 	}
+
+	if (data.LoadSound(ResourceType::SOUND_EAT_FRUIT, "resources/sounds/FX/eat_fruit.wav") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
 	startMusic = data.GetSound(ResourceType::MUSIC_START);
 	power_pellet = data.GetSound(ResourceType::SOUND_POWER_PELLET);
 	retreating = data.GetSound(ResourceType::SOUND_RETREATING);
@@ -182,6 +188,7 @@ AppStatus Scene::Init()
 	munch_2 = data.GetSound(ResourceType:: SOUND_MUNCH_2);
 	eat_ghost = data.GetSound(ResourceType::SOUND_EAT_GHOST);
 	dead = data.GetSound(ResourceType::SOUND_DEAD);
+	eat_fruit = data.GetSound(ResourceType::SOUND_EAT_FRUIT);
 	lettersTexture = data.GetTexture(ResourceType::IMG_LETTERS);
 
 	//Create player
@@ -344,7 +351,7 @@ AppStatus Scene::LoadLevel(int stage)
 		size = LEVEL_WIDTH * LEVEL_HEIGHT;
 		map = new int[size] {
 			0,	0,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	2,	2,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	31,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	101,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	102,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	5,	4,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
@@ -364,7 +371,7 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	32,	24,	24,	24,	24,	24,	24,	24,	24,	24,	31,	0,	0,	0,	0,	5,	0,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	0,	4,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24, 33,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	0,	3,	3,	3,	3,	3,	8,	0,	0,	0,	0,	9,	8,	0,	0,	0,	0,	9,	3,	3,	3,	3,	3,	0,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	101,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
@@ -376,7 +383,7 @@ AppStatus Scene::LoadLevel(int stage)
 			1,	-1,	-1,	-1,	-1,	-1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	-1,	-1,	-1, -1,	1,
 			1,	1,	1,	1,	1,	1,	24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 31,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	7,	6,	0,	0,	0,	0,	30,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	1,	1,	1,	1,	1,	1,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	29,	28,	28,	28,	28,	28,	28,	28,	28,	28,	28,	28,	28,	27,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	105,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	51,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	51,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
@@ -400,7 +407,7 @@ AppStatus Scene::LoadLevel(int stage)
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	5,	4,	0,	51,	0,	0,	0,	0,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	5,	4,	0,	0,	0,	0,	7,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	2,	6,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	9,	8,	0,	51,	0,	0,	9,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	3,	8,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
-			0,	0,	0,	0,	0,	0,	22,	103,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	104,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
+			0,	0,	0,	0,	0,	0,	22,	0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	51,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
 			0,	0,	0,	0,	0,	0,	22,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	26,	0,	0,	0,	0,	0,	0,
@@ -466,33 +473,19 @@ AppStatus Scene::LoadLevel(int stage)
 				pacmanSpawnPos = pos;
 				player->SetPos(pacmanSpawnPos);
 			}
-			else if (tile == Tile::BLINKY)
+			else if (tile == Tile::GHOST)
 			{
 				pos.x = x * TILE_SIZE;
 				pos.y = y * TILE_SIZE;
-				blinkySpawnPos = pos;
-				blinky->SetPos(blinkySpawnPos);
-			}
-			else if (tile == Tile::PINKY)
-			{
-				pos.x = x * TILE_SIZE;
-				pos.y = y * TILE_SIZE;
-				pinkySpawnPos = pos;
-				pinky->SetPos(pinkySpawnPos);
-			}
-			else if (tile == Tile::INKY)
-			{
-				pos.x = x * TILE_SIZE;
-				pos.y = y * TILE_SIZE;
-				inkySpawnPos = pos;
-				inky->SetPos(inkySpawnPos);
-			}
-			else if (tile == Tile::CLYDE)
-			{
-				pos.x = x * TILE_SIZE;
-				pos.y = y * TILE_SIZE;
-				clydeSpawnPos = pos;
-				clyde->SetPos(clydeSpawnPos);
+				ghostSpawnPos = pos;
+				blinky->SetPos(ghostSpawnPos);
+				blinky->StartWalking(Directions::RIGHT);
+				pinky->SetPos(ghostSpawnPos);
+				pinky->StartWalking(Directions::LEFT);
+				inky->SetPos(ghostSpawnPos);
+				inky->StartWalking(Directions::RIGHT);
+				clyde->SetPos(ghostSpawnPos);
+				clyde->StartWalking(Directions::LEFT);
 			}
 			else if (tile == Tile::SMALL_PELET)
 			{
@@ -531,6 +524,15 @@ AppStatus Scene::LoadLevel(int stage)
 				obj = new Object(pos, ObjectType::RIGHT_TELEPORTER, TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE * 4);
 				objects.push_back(obj);
 				map[i] = -1;
+			}
+			else if (tile == Tile::FRUIT)
+			{
+				pos.x = x * TILE_SIZE;
+				pos.y = y * TILE_SIZE;
+
+				fruitSpawnPoint = pos;
+
+				map[i] = 0;
 			}
 			++i;
 		}
@@ -634,19 +636,19 @@ void Scene::ReloadScene()
 	float percent = static_cast<float>(peletsCollected) / static_cast<float>(totalPelets) * 100;
 	if (percent >= BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(GhostState::CHASE);
 
-	blinky->SetPos(blinkySpawnPos);
+	blinky->SetPos(ghostSpawnPos);
 	if (percent < BLINKY_PERCENT_TO_PERMANENTLY_CHASE) blinky->ChangeCommonState(ghostState);
 	blinky->Reload();
 
-	pinky->SetPos(pinkySpawnPos);
+	pinky->SetPos(ghostSpawnPos);
 	pinky->ChangeCommonState(ghostState);
 	pinky->Reload();
 
-	inky->SetPos(inkySpawnPos);
+	inky->SetPos(ghostSpawnPos);
 	inky->ChangeCommonState(ghostState);
 	inky->Reload();
 
-	clyde->SetPos(clydeSpawnPos);
+	clyde->SetPos(ghostSpawnPos);
 	clyde->ChangeCommonState(ghostState);
 	clyde->Reload();
 
@@ -786,6 +788,7 @@ void Scene::Release()
 	munch_2 = nullptr;
 	eat_ghost = nullptr;
 	dead = nullptr;
+	eat_fruit = nullptr;
 	ResourceManager& data = ResourceManager::Instance();
 	data.ReleaseSound(ResourceType::SOUND_SIREN_1);
 	data.ReleaseSound(ResourceType::SOUND_SIREN_2);
@@ -800,6 +803,7 @@ void Scene::Release()
 	data.ReleaseSound(ResourceType::SOUND_EAT_GHOST);
 	data.ReleaseSound(ResourceType::SOUND_DEAD);
 	data.ReleaseTexture(ResourceType::IMG_LETTERS);
+	data.ReleaseTexture(ResourceType::SOUND_EAT_FRUIT);
 	ClearLevel();
 }
 void Scene::UpdateGhostState()
@@ -869,6 +873,18 @@ void Scene::CheckCollisions()
 				it = objects.erase(it);
 				peletsCollected++;
 				if (peletsCollected == totalPelets)	Win();
+				float percent = static_cast<float>(peletsCollected) / static_cast<float>(totalPelets) * 100;
+				if (percent >= PERCENT_TO_FRUIT && !fruitSpawned)
+				{
+					int levelIndex = lvl % 8;
+					Point pos;
+					Object* obj;
+					pos.x = fruitSpawnPoint.x;
+					pos.y = fruitSpawnPoint.y;
+					obj = new Object(pos, static_cast<ObjectType>(static_cast<int>(ObjectType::FIRST_FRUIT) + levelIndex), LARGE_OBJECT_SIZE);
+					objects.push_back(obj);
+					fruitSpawned = true;
+				}
 			}
 			else if (type == ObjectType::LARGE_PELET)
 			{
@@ -887,6 +903,70 @@ void Scene::CheckCollisions()
 			else if (type == ObjectType::LEFT_TELEPORTER)
 			{
 				player->SetPos(Point({ RIGHT_TP_POS_X,RIGHT_TP_POS_Y }));
+			}
+			else if (type == ObjectType::FRUIT0)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT1)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT2)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT3)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT4)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT5)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT6)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
+			}
+			else if (type == ObjectType::FRUIT7)
+			{
+				if (!IsSoundPlaying(*eat_ghost)) PlaySound(*eat_fruit);
+				EatFruitPuntuation(type, (*it)->GetCenterPosition());
+				player->IncrScore((*it)->Points());
+				delete* it;
+				it = objects.erase(it);
 			}
 		}
 		if (blinky_box.TestAABB(obj_box))
@@ -950,10 +1030,45 @@ void Scene::CheckCollisions()
 		{
 			it++;
 		}
+		else if (type == ObjectType::FRUIT0)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT1)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT2)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT3)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT4)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT5)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT6)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+		else if (type == ObjectType::FRUIT7)
+		{
+			if (!player_box.TestAABB(obj_box)) it++;
+		}
+
+
 	}
 
-	if (player_box.TestAABB(blinky_box))
+	if (player_box.TestAABB(blinky_box) && (float)player->CalculateDistance(blinky->GetPosition()) <DISTANCE_COLLISION)
 	{
+		
 		if (blinky->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
 			blinky->ChangeState(GhostState::EATEN); 
@@ -962,7 +1077,7 @@ void Scene::CheckCollisions()
 		}
 		else if (blinky->GetState() == GhostState::SCATTLE || blinky->GetState() == GhostState::CHASE) PlayerDie();
 	}
-	if (player_box.TestAABB(pinky_box)) 
+	if (player_box.TestAABB(pinky_box) && (float)player->CalculateDistance(pinky->GetPosition()) < DISTANCE_COLLISION)
 	{
 		if (pinky->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
@@ -972,7 +1087,7 @@ void Scene::CheckCollisions()
 		}
 		else if (pinky->GetState() == GhostState::SCATTLE || pinky->GetState() == GhostState::CHASE) PlayerDie();
 	}
-	if (player_box.TestAABB(inky_box)) 
+	if (player_box.TestAABB(inky_box) && (float)player->CalculateDistance(inky->GetPosition()) < DISTANCE_COLLISION)
 	{
 		if (inky->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
@@ -982,7 +1097,7 @@ void Scene::CheckCollisions()
 		}
 		else if (inky->GetState() == GhostState::SCATTLE || inky->GetState() == GhostState::CHASE) PlayerDie();
 	}
-	if (player_box.TestAABB(clyde_box)) 
+	if (player_box.TestAABB(clyde_box) && (float)player->CalculateDistance(clyde->GetPosition()) < DISTANCE_COLLISION)
 	{
 		if (clyde->GetState() == GhostState::FRIGHTENED) //COMIDO
 		{
@@ -1022,6 +1137,47 @@ void Scene::EatGhostPuntuation(Point position)
 		break;
 	case 3:
 		ShowPuntuation(position, Puntuations::P_1600);
+		player->IncrScore(1600);
+		break;
+	default:
+		break;
+	}
+	ghostEaten++;
+}
+void Scene::EatFruitPuntuation(ObjectType type, Point position)
+{
+	switch (type)
+	{
+	case ObjectType::FRUIT0:
+		ShowPuntuation(position, Puntuations::P_100);
+		player->IncrScore(200);
+		break;
+	case ObjectType::FRUIT1:
+		ShowPuntuation(position, Puntuations::P_300);
+		player->IncrScore(400);
+		break;
+	case ObjectType::FRUIT2:
+		ShowPuntuation(position, Puntuations::P_500);
+		player->IncrScore(800);
+		break;
+	case ObjectType::FRUIT3:
+		ShowPuntuation(position, Puntuations::P_700);
+		player->IncrScore(1600);
+		break;
+	case ObjectType::FRUIT4:
+		ShowPuntuation(position, Puntuations::P_1000);
+		player->IncrScore(200);
+		break;
+	case ObjectType::FRUIT5:
+		ShowPuntuation(position, Puntuations::P_2000);
+		player->IncrScore(400);
+		break;
+	case ObjectType::FRUIT6:
+		ShowPuntuation(position, Puntuations::P_3000);
+		player->IncrScore(800);
+		break;
+	case ObjectType::FRUIT7:
+		ShowPuntuation(position, Puntuations::P_5000);
 		player->IncrScore(1600);
 		break;
 	default:

@@ -41,6 +41,7 @@ public:
 	void ChangeCommonState(GhostState state);
 	void ChangeState(GhostState state);
 	void Reload();
+	void StartWalking(Directions dir);
 
 	virtual void Update();
 	virtual void UpdateStates();
@@ -65,7 +66,7 @@ protected:
 	void StartWalkingRight();
 	void StartWalkingDown();
 	void StartWalkingUp();
-	void StartWalking(Directions dir);
+	
 	Directions OppositeDirection(Directions dir);
 	std::vector<Directions> GetDirectionsCanMove();
 

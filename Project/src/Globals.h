@@ -35,6 +35,8 @@ enum class Directions { NONE = -1, RIGHT, LEFT, UP, DOWN };
 #define BLINKY_PERCENT_TO_PERMANENTLY_CHASE		80
 #define TIME_TO_START		2
 #define TIME_WIN			3
+#define PERCENT_TO_FRUIT	70
+#define DISTANCE_COLLISION	16
 
 //Teleports
 #define RIGHT_TP_POS_X		496

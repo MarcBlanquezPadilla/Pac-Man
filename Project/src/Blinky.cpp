@@ -30,6 +30,10 @@ void Blinky::Update()
 	}
 	else if (state == GhostState::EATEN)
 	{
+		if (navMesh->CheckItsJustAbove(pos, GHOST_FRAME_SIZE))
+		{
+			speed = GHOST_SPEED * 2;
+		}
 		if (navMesh->RightHalf(navMesh->GetPathIndex(GetCenterPosition().x, GetCenterPosition().y))) GoPath({ RIGHT_SPAWN_POS_X, SPAWN_POS_Y });
 		else GoPath({ LEFT_SPAWN_POS_X, SPAWN_POS_Y });
 	}

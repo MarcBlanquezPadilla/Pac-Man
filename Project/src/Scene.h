@@ -38,6 +38,7 @@ private:
     void StopSoundsInException(const Sound* s);
     void ShowPuntuation(Point position, Puntuations puntuation);
     void EatGhostPuntuation(Point position);
+    void EatFruitPuntuation(ObjectType type, Point position);
     void ClearLevel();
     void RenderObjects() const;
     void RenderObjectsDebug(const Color& col) const;
@@ -81,11 +82,10 @@ private:
     bool goNextLevel;
     bool died;
     bool won;
+    bool fruitSpawned;
     Point pacmanSpawnPos;
-    Point blinkySpawnPos; //PROVISIONAL
-    Point pinkySpawnPos; //PROVISIONAL
-    Point inkySpawnPos; //PROVISIONAL
-    Point clydeSpawnPos; //PROVISIONAL
+    Point ghostSpawnPos; 
+    Point fruitSpawnPoint; 
 
     //SOUNDS
     const Sound* startMusic;
@@ -100,6 +100,7 @@ private:
     const Sound* munch_2;
     const Sound* eat_ghost;
     const Sound* dead;
+    const Sound* eat_fruit;
 
     //TEXTURES
     const Texture* lettersTexture;

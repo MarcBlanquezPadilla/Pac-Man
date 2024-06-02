@@ -68,8 +68,6 @@ AppStatus Ghost::Initialise()
 
 	stateChangeTime = 0;
 	state = GhostState::SCATTLE;
-	direction = Directions::RIGHT;
-	SetAnimation((int)GhostAnim::WALK_RIGHT);
 
 	return AppStatus::OK;
 }
@@ -208,8 +206,10 @@ void Ghost::ChangeState(GhostState s)
 		break;
 	case GhostState::EATEN:
 		state = GhostState::EATEN;
-		speed = GHOST_SPEED*2;
+		speed = GHOST_SPEED/2;
+
 		StartWalking(direction);
+		route.clear();
 		break;
 	default:
 		break;

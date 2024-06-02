@@ -23,7 +23,7 @@ enum class Tile {
 	DOOR = 50, SMALL_PELET, LARGE_PELET, TP_LEFT, TP_RIGHT,
 
 	// id >= 100: entities' initial locations
-	PLAYER = 100, BLINKY, PINKY, INKY, CLYDE,
+	PLAYER = 100, GHOST, FRUIT,
 
 	//Intervals
 	STATIC_FIRST = BLACK_BLOCK,
@@ -33,7 +33,7 @@ enum class Tile {
 	SPECIAL_FIRST = DOOR,
 	SPECIAL_LAST = DOOR,
 	ENTITY_FIRST = PLAYER,
-	ENTITY_LAST = PLAYER
+	ENTITY_LAST = FRUIT
 };
 
 class TileMap

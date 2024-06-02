@@ -41,6 +41,9 @@ Point Entity::GetCenterPosition()
 {
 	Point p(pos.x + width / 2, pos.y + height / 2);
 	return p;
+}Point Entity::GetPosition()
+{
+	return pos;
 }
 Point Entity::GetRenderingPosition() const
 {
