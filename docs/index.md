@@ -1,3 +1,5 @@
+![Pac-Man_logo](https://i.pinimg.com/originals/b4/ee/c4/b4eec4d093adbe9d8a3cbb40d024836a.png)
+
 ##  Our Project
 We’re going to replicate the 1980 Pac-Man game arcade version developed by Namco as a tribute to the game. This project has been done by two students of CITM - UPC (Terrasa, Spain).
 
