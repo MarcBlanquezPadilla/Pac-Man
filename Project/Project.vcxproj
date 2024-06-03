@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>"C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib";C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;$(IncludePath)</IncludePath>
-    <LibraryPath>"C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib";C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\marcbp11\Documents\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;"C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib";$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;"C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib";$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\marcb\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib;C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\include;C:\Users\yovyy\OneDrive\Documentos\GitHub\Pac-Man\Project\libraries\raylib\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
